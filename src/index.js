@@ -5,42 +5,65 @@ $(document).ready(function () {
 	add.click(function () {
 		let n = $("input#n").val();
 		let m = $("input#m").val();
+		let k = $("input#k").val();
 
-		let matrix = [];
-		let types = [];
+		if (n && m && k && n > 0 && m > 0 && k > 0) {
 
-		for (let i = 0; i < m; i++) {
-			matrix[i] = [];
-			for (let k = 0; k < n; k++) {
-				matrix[i][k] = {
-					name: "",
-					colspan: 1,
-					rowspan: 1,
-					x: i,
-					y: k
+			let matrix = [];
+			let types = [];
+
+			for (let i = 0; i < m; i++) {
+				matrix[i] = [];
+				for (let k = 0; k < n; k++) {
+					matrix[i][k] = {
+						name: "",
+						colspan: 1,
+						rowspan: 1,
+						x: i,
+						y: k
+					}
 				}
 			}
+
+			for (let i = 0; i < n; i++) {
+				types[i] = {
+					type: "",
+					variants: [],
+					name: "",
+					formula: ""
+				};
+			}
+
+			createTable(matrix);
+			createTypes(types);
 		}
 
-		for (let i = 0; i < n; i++) {
-			types[i] = {
-				type: "",
-				variants: [],
-				name: "",
-				formula: ""
-			};
+		if (!n || n <= 0) {
+			$("#n-error").text("Укажите значение N");
+		} else {
+			$("#n-error").text("");
 		}
 
-		createTable(matrix);
-		createTypes(types);
+		if (!m || m <= 0) {
+			$("#m-error").text("Укажите значение M");
+		} else {
+			$("#m-error").text("");
+		}
+
+		if (!k || k <= 0) {
+			$("#k-error").text("Укажите значение K");
+		} else {
+			$("#k-error").text("");
+		}
+
 	});
 
 	function createTypes(types) {
 		$("div#types").html("");
-		
+
 		let tbody = $("<table class='table table-striped'>");
 		let tr = $("<tr>");
-		
+
 		for (let k = 0; k < types.length; k++) {
 			let td = $("<td>");
 			let select = $("<select id='example'>");
@@ -50,13 +73,13 @@ $(document).ready(function () {
 			let options3 = $('<option value="foo">text</option>');
 			let options4 = $('<option value="foo">formula</option>');
 			let options5 = $('<option value="foo">table</option>');
-			
-			let input1 = $("<input type='text' placeholder='name'>").val(types[k].name).change(function (){
+
+			let input1 = $("<input type='text' placeholder='name'>").val(types[k].name).change(function () {
 				types[k].name = $(this).val();
 				console.log(types);
 			});
 
-			let input2 = $("<input type='text' placeholder='formula'>").val(types[k].formula).change(function (){
+			let input2 = $("<input type='text' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
 				console.log(types);
 			});
@@ -77,9 +100,9 @@ $(document).ready(function () {
 			input4.appendTo(td);
 			input5.appendTo(td);
 			input6.appendTo(td);
-		 	td .appendTo(tr);
+			td.appendTo(tr);
 		}
-	
+
 		tr.appendTo(tbody);
 		tbody.appendTo("div#types");
 	}

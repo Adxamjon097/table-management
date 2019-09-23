@@ -1,56 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Bootstrap 3 </title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
 
-    <div class="container">
-    	<div class="row">
-			  <div class="form-group">
-			    <label for="email">M:</label>
-			    <input type="text" class="form-control" id="m">
-			  </div>
-			  <div class="form-group">
-			    <label for="pwd">N:</label>
-			    <input type="text" class="form-control" id="n">
-			  </div>
-			  <button id="add" class="btn btn-default"> Submit </button>
-    	</div>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Bootstrap 3 </title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
 
-    <div class="container">
-      <div class="row">
-        <div id="table">
-          
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Шапка таблицы</div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="input-group">
+                  <span class="input-group-addon" id="addon1">M:</span>
+                  <input class="form-control" placeholder="Укажите количество строк" aria-describedby="addon1" id="m">
+                </div>
+                <p class="text-danger" id="m-error"></p>
+
+              </div>
+              <hr>
+              <div class="col-md-12">
+                <div class="input-group">
+                  <span class="input-group-addon" id="addon2">N:</span>
+                  <input class="form-control" placeholder="Укажите количество столбцов" aria-describedby="addon2"
+                    id="n">
+                </div>
+                <p class="text-danger" id="n-error"></p>
+              </div>
+            </div>
+          </div>
         </div>
-        <hr>
-        <div id="types"></div>
 
-        <button class="btn btn-success">Сохранить</button>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Тело таблицы</div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="input-group">
+                  <span class="input-group-addon" id="addon3">K:</span>
+                  <input class="form-control" placeholder="Укажите количество строк" aria-describedby="addon3" id="k">
+                </div>
+                <p class="text-danger" id="k-error"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="add" class="btn btn-primary"> Создать таблицу </button>
+
       </div>
     </div>
+  </div>
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="../dist/bundle.js"></script>
-  </body>
+  <form id="send-form">
+    <input type="hidden" name="matrix">
+    <input type="hidden" name="types">
+  </form>
+
+  <div class="container">
+    <h4>Шапка таблицы</h4>
+    <div id="table"></div>
+
+    <hr>
+
+    <h4>Тело таблицы</h4>
+    <div id="types"></div>
+
+    <button class="btn btn-success">Сохранить</button>
+  </div>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="../dist/bundle.js"></script>
+</body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
