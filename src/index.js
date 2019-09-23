@@ -7,6 +7,7 @@ $(document).ready(function () {
 		let m = $("input#m").val();
 
 		let matrix = [];
+		let types = [];
 
 		for (let i = 0; i < m; i++) {
 			matrix[i] = [];
@@ -21,8 +22,23 @@ $(document).ready(function () {
 			}
 		}
 
+
+		for (let i = 0; i < n; i++){
+			types[i] = {
+				type: "",
+				variants: [],
+				name: "",
+				formula: ""
+			};
+		}
+
 		createTable(matrix);
+		createTypes(types);
 	});
+
+	function createTypes (types) {
+
+	}
 
 	function createTable(matrix) {
 		$("div#table").html("");
