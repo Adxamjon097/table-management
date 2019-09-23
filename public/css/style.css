@@ -75,3 +75,13 @@
 	color: red;
 }
 
+#types {
+	margin-top: 50px;
+}
+
+#types table tr td {
+	border: 2px solid rgba(0, 0, 0, 0.5);
+	height: 30px;
+	position: relative;
+}
+

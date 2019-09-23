@@ -35,9 +35,7 @@ $(document).ready(function () {
 		createTypes(types);
 	});
 
-	function createTypes(types) {
 
-	}
 
 	function normalize(matrix) {
 		var max = null;
@@ -49,8 +47,8 @@ $(document).ready(function () {
 			for (let j = 0; j < matrix[i].length; j++) {
 				sums[i] += matrix[i][j].colspan;
 
-				if (matrix[i][j].rowspan > 1){
-					for (let u = i + 1; u <= i + matrix[i][j].rowspan - 1; u++){
+				if (matrix[i][j].rowspan > 1) {
+					for (let u = i + 1; u <= i + matrix[i][j].rowspan - 1; u++) {
 						sums[u] += matrix[i][j].colspan;
 					}
 				}
@@ -74,6 +72,8 @@ $(document).ready(function () {
 			}
 		}
 	}
+
+
 
 	function createTable(matrix) {
 		normalize(matrix);
@@ -167,7 +167,9 @@ $(document).ready(function () {
 
 		table.appendTo("div#table");
 	}
-	console.log(22);
+
+
+
 });
 
 
