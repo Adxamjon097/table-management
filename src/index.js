@@ -79,7 +79,10 @@ $(document).ready(function () {
 			let form_group_last_select = $('<div class="form-group last select"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>')
 
-			let select = $("<select id='select' class='form-control'>");
+			let select = $("<select id='select' class='form-control'>").val(types[k].type).change(function () {
+				types[k].type = $(this).val();
+				console.log(types);
+			});
 			let options1 = $('<option value="1">number</option>');
 			let options2 = $('<option value="2">select</option>');
 			let options3 = $('<option value="3">text</option>');
@@ -95,10 +98,28 @@ $(document).ready(function () {
 				types[k].formula = $(this).val();
 				console.log(types);
 			});
-			let input3 = $("<input type='text' class='form-control' placeholder='variants'>");
-			let input4 = $("<input type='text' class='form-control' placeholder='table'>");
-			let input5 = $("<input type='text' class='form-control' placeholder='key'>");
-			let input6 = $("<input type='text' class='form-control' placeholder='value'>");
+			let i1 = 0;
+			let input3 = $("<input type='text' class='form-control' placeholder='variants'>").val(types[k].variants).change(function () {
+				types[k].variants = $(this).val();
+				i1++;
+				console.log(types);
+				console.log(i1);
+			});
+
+
+
+			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
+				types[k].table = $(this).val();
+				console.log(types);
+			});
+			let input5 = $("<input type='text' class='form-control' placeholder='key'>").val(types[k].key).change(function () {
+				types[k].key = $(this).val();
+				console.log(types);
+			});
+			let input6 = $("<input type='text' class='form-control' placeholder='value'>").val(types[k].value).change(function () {
+				types[k].value = $(this).val();
+				console.log(types);
+			});
 			
 			options1.appendTo(select);
 			options2.appendTo(select);
