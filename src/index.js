@@ -77,7 +77,7 @@ $(document).ready(function () {
 			let form_group_table2 = $('<div class="form-group table">');
 			let addInput = $('<div class="addInput"></div>');
 			let form_group_last_select = $('<div class="form-group last select"></div>');
-			let a = $('<a href="#" class="addInput"><i class="fa fa-plus"></i></a>')
+			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>')
 
 			let select = $("<select id='select' class='form-control'>");
 			let options1 = $('<option value="1">number</option>');

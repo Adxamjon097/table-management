@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
-	var addInput = $("#types a.addInput");
-	addInput.click(function() {
-		$("<div class='form-group select active'> <input type='text' class='form-control' placeholder='variant'> </div>").appendTo('#types div.addInput');
+	$(document).on('click', "#types a.addInput", function() {
+		$("<div class='form-group select active'> <input type='text' class='form-control' placeholder='variant'> </div>")
+		.appendTo($(this).closest('td').find('div.addInput'));
 	});
 
 	$(document).on('change', '#select', function(){
