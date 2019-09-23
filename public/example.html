@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Bootstrap 3 </title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+    <div class="container">
+    	<div class="row">
+			  <div class="form-group">
+			    <label for="email"> M: </label>
+			    <input type="text" class="form-control" id="m">
+			  </div>
+			  <div class="form-group">
+			    <label for="pwd"> N: </label>
+			    <input type="text" class="form-control" id="n">
+			  </div>
+			  <button id="add" class="btn btn-default"> Create Table </button>
+    	</div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div id="thead"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div id="tbody"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div id="types">
+          <table class="table table-striped">
+            <tr>
+              <td>
+                <div class="wrap">
+                  <div class="left">
+                    <div class="form-group active">
+                      <select class="form-control" id="select">
+                        <option value="1"> number </option>
+                        <option value="2"> select </option>
+                        <option value="3"> text </option>
+                        <option value="4"> formula </option>
+                        <option value="5"> table </option>
+                      </select>
+                    </div>
+                    <div class="form-group active">
+                      <input type="text" class="form-control" placeholder="number">
+                    </div>
+                    <div class="form-group select">
+                      <input type="text" class="form-control" placeholder="variant">
+                    </div>
+                    <div class="form-group formula">
+                      <input type="text" class="form-control" placeholder="formula">
+                    </div>
+                    <div class="form-group table">
+                      <input type="text" class="form-control" placeholder="table">
+                    </div>
+                    <div class="form-group table">
+                      <input type="text" class="form-control" placeholder="key">
+                    </div>
+                    <div class="form-group table">
+                      <input type="text" class="form-control" placeholder="value">
+                    </div>
+                    <div class="addInput"></div>
+                    <div class="last select form-group">
+                      <a href="#!" class="addInput"> <i class="fa fa-plus"></i> </a>
+                    </div>
+                  </div>
+                  <div class="center"></div>
+                  <div class="right"></div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="../dist/bundle.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
