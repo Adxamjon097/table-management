@@ -1,0 +1,77 @@
+
+#table {
+	margin-top: 50px;
+}
+#table table {}
+#table table tr {}
+#table table tr td {
+	border: 2px solid rgba(0, 0, 0, 0.5);
+	height: 30px;
+	position: relative;
+}
+
+#table div.icons {
+	position: absolute;
+	bottom: 100%;
+	width: 100px;
+	padding: 5px 0px;
+	text-align: center;
+	background-color: black;
+	border-radius: 5px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-8px);
+	display: none;
+}
+
+#table table tr td:hover div.icons {
+	display: block;
+}
+
+#table table tr td span {
+	display: block;
+    width: 100%;
+    height: 100%;
+}
+#table table tr td input{
+	height: 100%;
+    border: 0;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+
+#table table tr:last-child td:last-child div.icons {
+	display: none;
+}
+
+#table div.icons::after {
+	content: "";
+    display: block;
+    position: absolute;
+    top: 80%;
+    transform: rotate(-45deg) translate(-50%, -50%);
+    z-index: -1;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    left: 50%;
+}
+
+#table div.icons::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 15px;
+	position: absolute;
+    bottom: -15px;
+}
+
+#table div.icons a {
+	margin: 0px 5px;
+}
+
+#table div.icons a i.fa {
+	font-size: 14px;
+	color: red;
+}
+
