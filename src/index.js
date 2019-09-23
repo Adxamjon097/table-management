@@ -22,7 +22,7 @@ $(document).ready(function () {
 			}
 		}
 
-		for (let i = 0; i < n; i++){
+		for (let i = 0; i < n; i++) {
 			types[i] = {
 				type: "",
 				variants: [],
@@ -84,8 +84,44 @@ $(document).ready(function () {
 		tbody.appendTo("div#types");
 	}
 
+	function normalize(matrix) {
+		var max = null;
+		var sums = new Array(matrix.length).fill(0);
+
+		for (let i = 0; i < matrix.length; i++) {
+
+			for (let j = 0; j < matrix[i].length; j++) {
+				sums[i] += matrix[i][j].colspan;
+
+				if (matrix[i][j].rowspan > 1) {
+					for (let u = i + 1; u <= i + matrix[i][j].rowspan - 1; u++) {
+						sums[u] += matrix[i][j].colspan;
+					}
+				}
+			}
+		}
+
+		max = Math.max(...sums);
+
+		for (let i = 0; i < sums.length; i++) {
+			if (sums[i] != max) {
+				for (let k = 0; k < max - sums[i]; k++) {
+					matrix[i].push({
+						name: "",
+						name: "",
+						rowspan: 1,
+						colspan: 1,
+						x: i,
+						j: matrix[i].length
+					})
+				}
+			}
+		}
+	}
 
 	function createTable(matrix) {
+		normalize(matrix);
+
 		$("div#table").html("");
 
 		let table = $("<table class='table table-striped'>");
@@ -95,7 +131,7 @@ $(document).ready(function () {
 
 			for (let j = 0; j < matrix[i].length; j++) {
 				let td = $('<td>').attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
-				let span = $('<input>').val(matrix[i][j].name).change(function (){
+				let span = $('<input>').val(matrix[i][j].name).change(function () {
 					matrix[i][j].name = $(this).val();
 				});
 				span.appendTo(td);
@@ -105,13 +141,18 @@ $(document).ready(function () {
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {
-						matrix[i][j].colspan++;
+						let next = matrix[i][j + 1];
+
+						matrix[i][j].colspan += next.colspan;
 
 						for (let a = i; a <= i + matrix[i][j].rowspan - 1; a++) {
-							matrix[a].pop();
+							if (a == i)
+								matrix[a].splice(j + 1, 1);
+							else matrix[a].pop();
 						}
 
 						createTable(matrix);
+
 					}).appendTo(tool);
 				}
 
@@ -172,7 +213,7 @@ $(document).ready(function () {
 	}
 
 
-	
+
 });
 
 
