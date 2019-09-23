@@ -1,16 +1,38 @@
 
-#table {
+#thead {
 	margin-top: 50px;
 }
-#table table {}
-#table table tr {}
-#table table tr td {
+
+#thead table tr td {
 	border: 2px solid rgba(0, 0, 0, 0.5);
 	height: 30px;
 	position: relative;
 }
 
-#table div.icons {
+#thead table tr td:hover {
+	outline: 1px solid lime;
+}
+
+#tbody {
+	margin-top: 50px;
+}
+
+#tbody table tr td {
+	border: 2px solid rgba(0, 0, 0, 0.5);
+	height: 30px;
+	position: relative;
+}
+
+#types {
+	margin-top: 50px;
+}
+
+#types table tr td {
+	border: 2px solid rgba(0, 0, 0, 0.5);
+	position: relative;
+}
+
+#thead div.icons {
 	position: absolute;
 	bottom: 100%;
 	width: 100px;
@@ -20,19 +42,21 @@
 	border-radius: 5px;
 	left: 50%;
 	transform: translateX(-50%) translateY(-8px);
-	display: none;
+	opacity: 0;
+	transition: all 0.4s ease-in-out;
 }
 
-#table table tr td:hover div.icons {
-	display: block;
+#thead table tr td:hover div.icons {
+	opacity: 1;
 }
 
-#table table tr td span {
+#thead table tr td span {
 	display: block;
     width: 100%;
     height: 100%;
 }
-#table table tr td input{
+
+#thead table tr td input{
 	height: 100%;
     border: 0;
     width: 100%;
@@ -40,11 +64,11 @@
     font-weight: 700;
 }
 
-#table table tr:last-child td:last-child div.icons {
+#thead table tr:last-child td:last-child div.icons {
 	display: none;
 }
 
-#table div.icons::after {
+#thead div.icons::after {
 	content: "";
     display: block;
     position: absolute;
@@ -57,7 +81,7 @@
     left: 50%;
 }
 
-#table div.icons::before {
+#thead div.icons::before {
 	content: "";
 	display: block;
 	width: 100%;
@@ -66,22 +90,53 @@
     bottom: -15px;
 }
 
-#table div.icons a {
+#thead div.icons a {
 	margin: 0px 5px;
 }
 
-#table div.icons a i.fa {
+#thead div.icons a i.fa {
 	font-size: 14px;
 	color: red;
 }
 
-#types {
-	margin-top: 50px;
+#types div.wrap {
+	display: flex;
+}
+
+#types div.wrap div.left {
+	width: 200px;
 }
 
 #types table tr td {
-	border: 2px solid rgba(0, 0, 0, 0.5);
-	height: 30px;
-	position: relative;
+	width: calc(100% / 6);
 }
+
+#types div.last {
+	text-align: right;
+	margin-right: 10px;
+}
+
+#types div.last a {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	background-color: black;
+	color: yellow;
+	font-weight: bold;
+	font-size: 14px;
+	position: relative;
+	border-radius: 50%;
+}
+
+#types div.last a i.fa {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#types div.form-group:not(.active) {
+	display: none;
+}
+
 
