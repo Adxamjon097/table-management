@@ -50,6 +50,7 @@ $(document).ready(function () {
 		tbody.appendTo("div#types");
 	}
 
+
 	function createTable(matrix) {
 		$("div#table").html("");
 
