@@ -1,15 +1,15 @@
 
-#thead {
+#table {
 	margin-top: 50px;
 }
 
-#thead table tr td {
+#table table tr td {
 	border: 2px solid rgba(0, 0, 0, 0.5);
 	height: 30px;
 	position: relative;
 }
 
-#thead table tr td:hover {
+#table table tr td:hover {
 	outline: 1px solid lime;
 }
 
@@ -32,7 +32,7 @@
 	position: relative;
 }
 
-#thead div.icons {
+#table div.icons {
 	position: absolute;
 	bottom: 100%;
 	width: 100px;
@@ -46,17 +46,17 @@
 	transition: all 0.4s ease-in-out;
 }
 
-#thead table tr td:hover div.icons {
+#table table tr td:hover div.icons {
 	opacity: 1;
 }
 
-#thead table tr td span {
+#table table tr td span {
 	display: block;
     width: 100%;
     height: 100%;
 }
 
-#thead table tr td input{
+#table table tr td input{
 	height: 100%;
     border: 0;
     width: 100%;
@@ -64,11 +64,11 @@
     font-weight: 700;
 }
 
-#thead table tr:last-child td:last-child div.icons {
+#table table tr:last-child td:last-child div.icons {
 	display: none;
 }
 
-#thead div.icons::after {
+#table div.icons::after {
 	content: "";
     display: block;
     position: absolute;
@@ -81,7 +81,7 @@
     left: 50%;
 }
 
-#thead div.icons::before {
+#table div.icons::before {
 	content: "";
 	display: block;
 	width: 100%;
@@ -90,11 +90,11 @@
     bottom: -15px;
 }
 
-#thead div.icons a {
+#table div.icons a {
 	margin: 0px 5px;
 }
 
-#thead div.icons a i.fa {
+#table div.icons a i.fa {
 	font-size: 14px;
 	color: red;
 }
