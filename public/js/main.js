@@ -5,36 +5,38 @@ $(document).ready(function() {
 		$("<div class='form-group select active'> <input type='text' class='form-control' placeholder='variant'> </div>").appendTo('#types div.addInput');
 	});
 
-	$("#select").change(function() {
+	$(document).on('change', '#select', function(){
+		console.log(11);
 		var data = $(this).val();
 		switch (+data) {
 			case 1:
-				$("#types div.form-group.select").removeClass('active');
-				$("#types div.form-group.formula").removeClass('active');
-				$("#types div.form-group.table").removeClass('active');
+				$(this).closest('td').find("div.form-group.select").removeClass('active');
+				$(this).closest('td').find("div.form-group.formula").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
 			case 2:
-				$("#types div.form-group.select").addClass('active');
-				$("#types div.form-group.formula").removeClass('active');
-				$("#types div.form-group.table").removeClass('active');
+				$(this).closest('td').find("div.form-group.select").addClass('active');
+				$(this).closest('td').find("div.form-group.formula").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
 			case 3: 
-				$("#types div.form-group.select").removeClass('active');
-				$("#types div.form-group.formula").removeClass('active');
-				$("#types div.form-group.table").removeClass('active');
+				$(this).closest('td').find("div.form-group.select").removeClass('active');
+				$(this).closest('td').find("div.form-group.formula").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
 			case 4:
-				$("#types div.form-group.formula").addClass('active');
-				$("#types div.form-group.select").removeClass('active');
-				$("#types div.form-group.table").removeClass('active');
+				$(this).closest('td').find("div.form-group.formula").addClass('active');
+				$(this).closest('td').find("div.form-group.select").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
 			case 5:
-				$("#types div.form-group.table").addClass('active');
-				$("#types div.form-group.select").removeClass('active');
-				$("#types div.form-group.formula").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").addClass('active');
+				$(this).closest('td').find("div.form-group.select").removeClass('active');
+				$(this).closest('td').find("div.form-group.formula").removeClass('active');
 				break;
 		}
 	});
+
 
 });
 

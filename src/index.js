@@ -66,40 +66,72 @@ $(document).ready(function () {
 
 		for (let k = 0; k < types.length; k++) {
 			let td = $("<td>");
-			let select = $("<select id='example'>");
-			let options0 = $('<option value="null" selected="selected">--tanlang--</option>');
-			let options1 = $('<option value="foo">number</option>');
-			let options2 = $('<option value="foo">select</option>');
-			let options3 = $('<option value="foo">text</option>');
-			let options4 = $('<option value="foo">formula</option>');
-			let options5 = $('<option value="foo">table</option>');
+			let wrap = $('<div class="wrap">');
+			let left = $('<div class="left">');
+			let form_group_active = $('<div class="form-group active">');
+			let form_group_active2 = $('<div class="form-group active">');
+			let form_group_select = $('<div class="form-group select">');
+			let form_group_formula = $('<div class="form-group formula">');
+			let form_group_table = $('<div class="form-group table">');
+			let form_group_table1 = $('<div class="form-group table">');
+			let form_group_table2 = $('<div class="form-group table">');
+			let addInput = $('<div class="addInput"></div>');
+			let form_group_last_select = $('<div class="form-group last select"></div>');
+			let a = $('<a href="#" class="addInput"><i class="fa fa-plus"></i></a>')
 
-			let input1 = $("<input type='text' placeholder='name'>").val(types[k].name).change(function () {
+			let select = $("<select id='select' class='form-control'>");
+			let options1 = $('<option value="1">number</option>');
+			let options2 = $('<option value="2">select</option>');
+			let options3 = $('<option value="3">text</option>');
+			let options4 = $('<option value="4">formula</option>');
+			let options5 = $('<option value="5">table</option>');
+
+			let input1 = $("<input type='text' class='form-control' placeholder='name'>").val(types[k].name).change(function () {
 				types[k].name = $(this).val();
 				console.log(types);
 			});
 
-			let input2 = $("<input type='text' placeholder='formula'>").val(types[k].formula).change(function () {
+			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
 				console.log(types);
 			});
-			let input3 = $("<input type='text' placeholder='variants'>");
-			let input4 = $("<input type='text' placeholder='table'>");
-			let input5 = $("<input type='text' placeholder='key'>");
-			let input6 = $("<input type='text' placeholder='value'>");
-			options0.appendTo(select);
+			let input3 = $("<input type='text' class='form-control' placeholder='variants'>");
+			let input4 = $("<input type='text' class='form-control' placeholder='table'>");
+			let input5 = $("<input type='text' class='form-control' placeholder='key'>");
+			let input6 = $("<input type='text' class='form-control' placeholder='value'>");
+			
 			options1.appendTo(select);
 			options2.appendTo(select);
 			options3.appendTo(select);
 			options4.appendTo(select);
 			options5.appendTo(select);
-			select.appendTo(td);
-			input1.appendTo(td);
-			input2.appendTo(td);
-			input3.appendTo(td);
-			input4.appendTo(td);
-			input5.appendTo(td);
-			input6.appendTo(td);
+
+			input2.appendTo(form_group_formula);
+
+			select.appendTo(form_group_active);
+
+			input1.appendTo(form_group_active2);
+
+			
+			input3.appendTo(form_group_select);
+			input4.appendTo(form_group_table);
+			input5.appendTo(form_group_table1);
+			input6.appendTo(form_group_table2);
+
+			form_group_active2.appendTo(left);
+			form_group_active.appendTo(left);
+			form_group_select.appendTo(left);
+			form_group_formula.appendTo(left);
+			form_group_table.appendTo(left);
+			form_group_table1.appendTo(left);
+			form_group_table2.appendTo(left);
+			addInput.appendTo(left);
+
+			a.appendTo(form_group_last_select);
+			form_group_last_select.appendTo(left);
+
+			left.appendTo(wrap);
+			wrap.appendTo(td);
 			td.appendTo(tr);
 		}
 
