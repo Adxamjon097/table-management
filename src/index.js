@@ -37,7 +37,7 @@ $(document).ready(function () {
 	});
 
 	function createTypes (types) {
-
+		
 	}
 
 	function createTable(matrix) {
