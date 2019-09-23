@@ -22,7 +22,6 @@ $(document).ready(function () {
 			}
 		}
 
-
 		for (let i = 0; i < n; i++){
 			types[i] = {
 				type: "",
@@ -42,8 +41,43 @@ $(document).ready(function () {
 		let tbody = $("<table class='table table-striped'>");
 		let tr = $("<tr>");
 		
-		for (var k = 0; k < types[0].length; k++) {
-		  var td = $("<td>").appendTo(tr);
+		for (let k = 0; k < types.length; k++) {
+			let td = $("<td>");
+			let select = $("<select id='example'>");
+			let options0 = $('<option value="null" selected="selected">--tanlang--</option>');
+			let options1 = $('<option value="foo">number</option>');
+			let options2 = $('<option value="foo">select</option>');
+			let options3 = $('<option value="foo">text</option>');
+			let options4 = $('<option value="foo">formula</option>');
+			let options5 = $('<option value="foo">table</option>');
+			
+			let input1 = $("<input type='text' placeholder='name'>").val(types[k].name).change(function (){
+				types[k].name = $(this).val();
+				console.log(types);
+			});
+
+			let input2 = $("<input type='text' placeholder='formula'>").val(types[k].formula).change(function (){
+				types[k].formula = $(this).val();
+				console.log(types);
+			});
+			let input3 = $("<input type='text' placeholder='variants'>");
+			let input4 = $("<input type='text' placeholder='table'>");
+			let input5 = $("<input type='text' placeholder='key'>");
+			let input6 = $("<input type='text' placeholder='value'>");
+			options0.appendTo(select);
+			options1.appendTo(select);
+			options2.appendTo(select);
+			options3.appendTo(select);
+			options4.appendTo(select);
+			options5.appendTo(select);
+			select.appendTo(td);
+			input1.appendTo(td);
+			input2.appendTo(td);
+			input3.appendTo(td);
+			input4.appendTo(td);
+			input5.appendTo(td);
+			input6.appendTo(td);
+		 	td .appendTo(tr);
 		}
 	
 		tr.appendTo(tbody);
