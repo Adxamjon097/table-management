@@ -36,8 +36,18 @@ $(document).ready(function () {
 		createTypes(types);
 	});
 
-	function createTypes (types) {
-
+	function createTypes(types) {
+		$("div#types").html("");
+		
+		let tbody = $("<table class='table table-striped'>");
+		let tr = $("<tr>");
+		
+		for (var k = 0; k < types[0].length; k++) {
+		  var td = $("<td>").appendTo(tr);
+		}
+	
+		tr.appendTo(tbody);
+		tbody.appendTo("div#types");
 	}
 
 	function createTable(matrix) {
@@ -125,7 +135,9 @@ $(document).ready(function () {
 
 		table.appendTo("div#table");
 	}
-	console.log(22);
+
+
+	
 });
 
 
