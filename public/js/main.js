@@ -1,8 +1,7 @@
 $(document).ready(function() {
 
 	$(document).on('click', "#types a.addInput", function() {
-		$("<div class='form-group select active'> <input type='text' class='form-control' placeholder='variants'> </div>")
-		.appendTo($(this).closest('td').find('div.addInput'));
+		$(this).closest('td').find(".item").first().clone(true, true).insertAfter($(this).closest('td').find(".item").last());
 	});
 
 	$(document).on('change', '#select', function(){

@@ -6,8 +6,9 @@ $(document).ready(function () {
 		let n = $("input#n").val();
 		let m = $("input#m").val();
 		let k = $("input#k").val();
+		let tableName = $("input#table-name").val();
 
-		if (n && m && k && n > 0 && m > 0 && k > 0) {
+		if (n && m && k && n > 0 && m > 0 && k > 0 && tableName && tableName != "") {
 
 			let matrix = [];
 			let types = [];
@@ -55,6 +56,11 @@ $(document).ready(function () {
 		} else {
 			$("#k-error").text("");
 		}
+		if (!tableName || tableName <= 0) {
+			$("#table-name-error").text("Укажите название таблицы");
+		} else {
+			$("#table-name-error").text("");
+		}
 
 	});
 
@@ -70,7 +76,7 @@ $(document).ready(function () {
 			let left = $('<div class="left">');
 			let form_group_active = $('<div class="form-group active">');
 			let form_group_active2 = $('<div class="form-group active">');
-			let form_group_select = $('<div class="form-group select">');
+			let form_group_select = $('<div class="form-group select item">');
 			let form_group_formula = $('<div class="form-group formula">');
 			let form_group_table = $('<div class="form-group table">');
 			let form_group_table1 = $('<div class="form-group table">');
@@ -98,15 +104,12 @@ $(document).ready(function () {
 				types[k].formula = $(this).val();
 				console.log(types);
 			});
-			let i1 = 0;
-			let input3 = $("<input type='text' class='form-control' placeholder='variants'>").val(types[k].variants).change(function () {
-				types[k].variants = $(this).val();
-				i1++;
-				console.log(types);
-				console.log(i1);
+
+			let input3 = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants).change(function () {
+				types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
+
+				console.log (types);
 			});
-
-
 
 			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
 				types[k].table = $(this).val();
