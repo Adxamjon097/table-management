@@ -192,7 +192,7 @@ $(document).ready(function () {
 						rowspan: 1,
 						colspan: 1,
 						x: i,
-						j: matrix[i].length
+						y: matrix[i].length
 					})
 				}
 			}
@@ -252,7 +252,7 @@ $(document).ready(function () {
 								rowspan: 1,
 								colspan: 1,
 								x: a,
-								j: matrix[a].length
+								y: matrix[a].length
 							});
 						}
 
@@ -269,7 +269,7 @@ $(document).ready(function () {
 								rowspan: 1,
 								colspan: 1,
 								x: i + matrix[i][j].rowspan,
-								j: matrix[i + matrix[i][j].rowspan].length
+								y: matrix[i + matrix[i][j].rowspan].length
 							});
 						}
 
