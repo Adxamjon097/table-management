@@ -89,6 +89,7 @@ $(document).ready(function () {
 				types[k].type = $(this).val();
 				console.log(types);
 			});
+
 			let options1 = $('<option value="1">number</option>');
 			let options2 = $('<option value="2">select</option>');
 			let options3 = $('<option value="3">text</option>');
@@ -220,6 +221,12 @@ $(document).ready(function () {
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {
+						for (let t = 0; t < matrix.length; t++){
+							if (matrix[t][j + 1] && i - t == matrix[t][j + 1].rowspan - 1){
+								matrix[t][j + 1].rowspan--;
+							}
+						}
+
 						let next = matrix[i][j + 1];
 
 						matrix[i][j].colspan += next.colspan;
