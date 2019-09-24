@@ -1,17 +1,44 @@
 $(document).ready(function () {
 
 	let add = $("button#add");
+	let content = $("#content");
+	let save = $("#save");
+
+	let matrix = [];
+	let types = [];
+
+	let k = null;
+	let tableName = null;
+
+	save.click(function () {
+		if (matrix.length > 0 && types.length > 0 && k && tableName) {
+			$.ajax({
+				method: "POST",
+				data: {
+					matrix,
+					types,
+					count: k,
+					name: tableName
+				},
+				url: ""
+			}).success (function (response) {
+				console.log (response);
+			});
+		}
+	});
 
 	add.click(function () {
 		let n = $("input#n").val();
 		let m = $("input#m").val();
-		let k = $("input#k").val();
-		let tableName = $("input#table-name").val();
+		k = $("input#k").val();
+		tableName = $("input#table-name").val();
 
 		if (n && m && k && n > 0 && m > 0 && k > 0 && tableName && tableName != "") {
 
-			let matrix = [];
-			let types = [];
+			content.show();
+
+			matrix = [];
+			types = [];
 
 			for (let i = 0; i < m; i++) {
 				matrix[i] = [];
@@ -110,7 +137,7 @@ $(document).ready(function () {
 			let input3 = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants).change(function () {
 				types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
 
-				console.log (types);
+				console.log(types);
 			});
 
 			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
@@ -125,7 +152,7 @@ $(document).ready(function () {
 				types[k].value = $(this).val();
 				console.log(types);
 			});
-			
+
 			options1.appendTo(select);
 			options2.appendTo(select);
 			options3.appendTo(select);
@@ -222,8 +249,8 @@ $(document).ready(function () {
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {
-						for (let t = 0; t < matrix.length; t++){
-							if (matrix[t][j + 1] && i - t == matrix[t][j + 1].rowspan - 1){
+						for (let t = 0; t < matrix.length; t++) {
+							if (matrix[t][j + 1] && i - t == matrix[t][j + 1].rowspan - 1) {
 								matrix[t][j + 1].rowspan--;
 							}
 						}
@@ -298,11 +325,4 @@ $(document).ready(function () {
 
 		table.appendTo("div#table");
 	}
-
-
-
 });
-
-
-
-
