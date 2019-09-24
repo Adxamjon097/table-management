@@ -44,20 +44,36 @@
 	border-radius: 5px;
 	left: 50%;
 	transform: translateX(-50%) translateY(-8px);
-	opacity: 0;
-	pointer-events: none;
-	transition: all 0.4s ease-in-out;
+	display: none;
+	/* opacity: 0; */
+	/* pointer-events: none; */
+	/* transition: all 0.4s ease-in-out; */
 }
 
-#table table tr td:focus div.icons {
+#table div.icons span {
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    color: red;
+    font-weight: bold;
+    line-height: 10px;
+    font-size: 12px;
+}
+
+#table div.icons span:hover {
+	cursor: pointer;
+}
+
+/* #table table tr td:focus div.icons {
 	opacity: 1;
 	pointer-events: all;
-}
+} */
 
 #table table tr td span {
-	display: block;
-    width: 100%;
-    height: 100%;
+	/* display: block; */
+    /* width: 100%; */
+    /* height: 100%; */
 }
 
 #table table tr td input{
@@ -69,7 +85,7 @@
 }
 
 #table table tr:last-child td:last-child div.icons {
-	display: none;
+	display: none !important;
 }
 
 #table div.icons::after {
