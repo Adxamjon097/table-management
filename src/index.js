@@ -238,7 +238,7 @@ $(document).ready(function () {
 			let tr = $("<tr>");
 
 			for (let j = 0; j < matrix[i].length; j++) {
-				let td = $('<td>').attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
+				let td = $("<td tabindex='1'>").attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
 				let span = $('<input>').val(matrix[i][j].name).change(function () {
 					matrix[i][j].name = $(this).val();
 				});
@@ -246,6 +246,7 @@ $(document).ready(function () {
 				td.appendTo(tr);
 
 				let tool = $("<div class='icons'>").appendTo(td);
+				let x = $("<span>x</span>").appendTo(tool);
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {

@@ -4,7 +4,17 @@ $(document).ready(function () {
 		$(this).closest('td').find(".item").first().clone(true, true).insertAfter($(this).closest('td').find(".item").last());
 	});
 
-	$(document).on('change', '#select', function () {
+	$(document).on('click', "#table div.icons span", function() {
+		$(this).parent("div.icons").fadeOut(300);
+	});
+
+	$(document).on('focus', '#table table tr td input', function() {
+		$(this).siblings('div.icons').fadeIn(300);
+		$('div.icons').not($(this).siblings('div.icons')).fadeOut(300);
+	});
+
+	$(document).on('change', '#select', function(){
+
 		var data = $(this).val();
 		switch (+data) {
 			case 1:
