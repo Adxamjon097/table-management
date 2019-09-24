@@ -3,6 +3,7 @@ $(document).ready(function () {
 	let add = $("button#add");
 	let content = $("#content");
 	let save = $("#save");
+	var id = $("#update-table-id").length > 0 ? $("#update-table-id").val() : null;
 
 	let matrix = [];
 	let types = [];
@@ -10,21 +11,28 @@ $(document).ready(function () {
 	let k = null;
 	let tableName = null;
 
-	save.click(function () {
-		if (matrix.length > 0 && types.length > 0 && k && tableName) {
+	function send(matrix, types, count, name, id = null) {
+		if (matrix.length > 0 && types.length > 0 && count && name) {
 			$.ajax({
 				method: "POST",
 				data: {
 					matrix,
 					types,
-					count: k,
-					name: tableName
+					count,
+					name,
+					id
 				},
 				url: "http://eko.md.uz/api/default/index"
-			}).done (function (response) {
-				console.log (response);
+			}).done(function (response) {
+				if (response.status == "ok") {
+					document.location = $("#route").data('url');
+				}
 			});
 		}
+	}
+
+	save.click(function () {
+		send(matrix, types, k, tableName, id);
 	});
 
 	add.click(function () {
@@ -106,54 +114,49 @@ $(document).ready(function () {
 			let left = $('<div class="left">');
 			let form_group_active = $('<div class="form-group active">');
 			let form_group_active2 = $('<div class="form-group active">');
-			let form_group_select = $('<div class="form-group select item">');
-			let form_group_formula = $('<div class="form-group formula">');
-			let form_group_table = $('<div class="form-group table">');
-			let form_group_table1 = $('<div class="form-group table">');
-			let form_group_table2 = $('<div class="form-group table">');
+			let form_group_formula = $('<div class="form-group formula ' + (types[k].type == 4 ? "active" : "") + '">');
+			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
+			let form_group_table1 = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
+			let form_group_table2 = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
 			let addInput = $('<div class="addInput"></div>');
-			let form_group_last_select = $('<div class="form-group last select"></div>');
+			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>')
 
-			let select = $("<select id='select' class='form-control'>").val(types[k].type).change(function () {
+			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
-				console.log(types);
+				
 			});
 
-			let options1 = $('<option value="1">number</option>');
-			let options2 = $('<option value="2">select</option>');
-			let options3 = $('<option value="3">text</option>');
-			let options4 = $('<option value="4">formula</option>');
-			let options5 = $('<option value="5">table</option>');
-			let options6 = $('<option value="6">date</option>');
+			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
+			let options2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select</option>');
+			let options3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>text</option>');
+			let options4 = $('<option value="4" ' + (types[k].type == 4 ? 'selected' : '') + '>formula</option>');
+			let options5 = $('<option value="5" ' + (types[k].type == 5 ? 'selected' : '') + '>table</option>');
+			let options6 = $('<option value="6" ' + (types[k].type == 6 ? 'selected' : '') + '>date</option>');
 
 			let input1 = $("<input type='text' class='form-control' placeholder='name'>").val(types[k].name).change(function () {
 				types[k].name = $(this).val();
-				console.log(types);
+				
 			});
 
 			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
-				console.log(types);
+				
 			});
 
-			let input3 = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
-				types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
-
-				console.log(types);
-			});
+			
 
 			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
 				types[k].table = $(this).val();
-				console.log(types);
+				
 			});
 			let input5 = $("<input type='text' class='form-control' placeholder='key'>").val(types[k].key).change(function () {
 				types[k].key = $(this).val();
-				console.log(types);
+				
 			});
 			let input6 = $("<input type='text' class='form-control' placeholder='value'>").val(types[k].value).change(function () {
 				types[k].value = $(this).val();
-				console.log(types);
+				
 			});
 
 			options1.appendTo(select);
@@ -169,14 +172,39 @@ $(document).ready(function () {
 
 			input1.appendTo(form_group_active2);
 
-			input3.appendTo(form_group_select);
 			input4.appendTo(form_group_table);
 			input5.appendTo(form_group_table1);
 			input6.appendTo(form_group_table2);
 
 			form_group_active2.appendTo(left);
 			form_group_active.appendTo(left);
-			form_group_select.appendTo(left);
+
+			for (let r = 0; types[k].variants && r < types[k].variants.length; r++) {
+				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants[r]).change(function () {
+					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
+
+				});
+
+				let form_group_select = $('<div class="form-group select item input-group ' + (r == 0 ? ' first ' : '') + (types[k].type == 2 ? "active" : "") + '">');
+
+				a.appendTo(form_group_select);
+				$('<span class="input-group-btn"><button class="btn btn-default"><i class="fa fa-minus"></i></button></span>').appendTo(form_group_select);
+				form_group_select.appendTo(left);
+			}
+
+			if (!types[k].variants || types[k].variants && types[k].variants.length == 0){
+				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
+					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
+
+				});
+
+				let form_group_select = $('<div class="form-group select item input-group first ' + (types[k].type == 2 ? "active" : "") + '">');
+
+				a.appendTo(form_group_select);
+				$('<span class="input-group-btn"><button class="btn btn-default"><i class="fa fa-minus"></i></button></span>').appendTo(form_group_select);
+				form_group_select.appendTo(left);
+			}
+
 			form_group_formula.appendTo(left);
 			form_group_table.appendTo(left);
 			form_group_table1.appendTo(left);
@@ -244,6 +272,7 @@ $(document).ready(function () {
 				let td = $("<td tabindex='1'>").attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
 				let span = $('<input>').val(matrix[i][j].name).change(function () {
 					matrix[i][j].name = $(this).val();
+					console.log(matrix[i][j].name);
 				});
 				span.appendTo(td);
 				td.appendTo(tr);
@@ -328,5 +357,22 @@ $(document).ready(function () {
 		}
 
 		table.appendTo("div#table");
+	}
+
+	if ($("#update-table-form").length > 0) {
+		let matrix_json = $("#update-table-matrix-json").val();
+
+		let types_json = $("#update-table-types-json").val();
+		let count = $("#update-table-count").val();
+		let name = $("#update-table-name").val();
+
+		matrix = JSON.parse(matrix_json);
+		types = JSON.parse(types_json);
+
+		k = count;
+		tableName = name;
+
+		createTable(matrix);
+		createTypes(types);
 	}
 });
