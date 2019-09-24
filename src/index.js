@@ -20,8 +20,8 @@ $(document).ready(function () {
 					count: k,
 					name: tableName
 				},
-				url: ""
-			}).success (function (response) {
+				url: "http://eko.md.uz/api/default/index"
+			}).done (function (response) {
 				console.log (response);
 			});
 		}
@@ -55,10 +55,13 @@ $(document).ready(function () {
 
 			for (let i = 0; i < n; i++) {
 				types[i] = {
-					type: "",
+					type: 1,
 					variants: [],
 					name: "",
-					formula: ""
+					formula: "",
+					table: "",
+					key: "",
+					value: "",
 				};
 			}
 
@@ -134,7 +137,7 @@ $(document).ready(function () {
 				console.log(types);
 			});
 
-			let input3 = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants).change(function () {
+			let input3 = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
 				types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
 
 				console.log(types);
