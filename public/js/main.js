@@ -5,7 +5,6 @@ $(document).ready(function() {
 	});
 
 	$(document).on('change', '#select', function(){
-		console.log(11);
 		var data = $(this).val();
 		switch (+data) {
 			case 1:
