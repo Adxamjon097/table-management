@@ -95,6 +95,7 @@ $(document).ready(function () {
 			let options3 = $('<option value="3">text</option>');
 			let options4 = $('<option value="4">formula</option>');
 			let options5 = $('<option value="5">table</option>');
+			let options6 = $('<option value="6">date</option>');
 
 			let input1 = $("<input type='text' class='form-control' placeholder='name'>").val(types[k].name).change(function () {
 				types[k].name = $(this).val();
@@ -130,6 +131,7 @@ $(document).ready(function () {
 			options3.appendTo(select);
 			options4.appendTo(select);
 			options5.appendTo(select);
+			options6.appendTo(select);
 
 			input2.appendTo(form_group_formula);
 
@@ -137,7 +139,6 @@ $(document).ready(function () {
 
 			input1.appendTo(form_group_active2);
 
-			
 			input3.appendTo(form_group_select);
 			input4.appendTo(form_group_table);
 			input5.appendTo(form_group_table1);

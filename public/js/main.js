@@ -1,10 +1,10 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
-	$(document).on('click', "#types a.addInput", function() {
+	$(document).on('click', "#types a.addInput", function () {
 		$(this).closest('td').find(".item").first().clone(true, true).insertAfter($(this).closest('td').find(".item").last());
 	});
 
-	$(document).on('change', '#select', function(){
+	$(document).on('change', '#select', function () {
 		var data = $(this).val();
 		switch (+data) {
 			case 1:
@@ -17,7 +17,7 @@ $(document).ready(function() {
 				$(this).closest('td').find("div.form-group.formula").removeClass('active');
 				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
-			case 3: 
+			case 3:
 				$(this).closest('td').find("div.form-group.select").removeClass('active');
 				$(this).closest('td').find("div.form-group.formula").removeClass('active');
 				$(this).closest('td').find("div.form-group.table").removeClass('active');
@@ -31,6 +31,11 @@ $(document).ready(function() {
 				$(this).closest('td').find("div.form-group.table").addClass('active');
 				$(this).closest('td').find("div.form-group.select").removeClass('active');
 				$(this).closest('td').find("div.form-group.formula").removeClass('active');
+				break;
+			case 6:
+				$(this).closest('td').find("div.form-group.select").removeClass('active');
+				$(this).closest('td').find("div.form-group.formula").removeClass('active');
+				$(this).closest('td').find("div.form-group.table").removeClass('active');
 				break;
 		}
 	});
