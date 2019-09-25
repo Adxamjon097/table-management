@@ -21,6 +21,30 @@ $(document).ready(function () {
 		initSelect(this);
 	});
 
+	$(document).on('blur', '#table input', function (){
+		if ($(this).val() == "") {
+			$(this).css({
+				border: "1px solid red"
+			});
+		} else {
+			$(this).css({
+				border: "1px solid transparent"
+			});
+		}
+	})
+
+	$(document).on('blur', '#types input', function (){
+		if ($(this).val() == "") {
+			$(this).css({
+				border: "1px solid red"
+			});
+		} else {
+			$(this).css({
+				border: "1px solid #ccc"
+			});
+		}
+	})
+
 	function initSelect(_this) {
 
 		var data = $(_this).val();
@@ -51,6 +75,11 @@ $(document).ready(function () {
 				$(_this).closest('td').find("div.form-group.formula").removeClass('active');
 				break;
 			case 6:
+				$(_this).closest('td').find("div.form-group.select").removeClass('active');
+				$(_this).closest('td').find("div.form-group.formula").removeClass('active');
+				$(_this).closest('td').find("div.form-group.table").removeClass('active');
+				break;
+			case 7:
 				$(_this).closest('td').find("div.form-group.select").removeClass('active');
 				$(_this).closest('td').find("div.form-group.formula").removeClass('active');
 				$(_this).closest('td').find("div.form-group.table").removeClass('active');

@@ -31,8 +31,43 @@ $(document).ready(function () {
 		}
 	}
 
+	function validation() {
+		var hasError = false;
+
+		$("#table input").each(function (i, el) {
+			if ($(el).val() == "") {
+				$(el).css({
+					border: "1px solid red"
+				});
+				hasError = true;
+			} else {
+				$(el).css({
+					border: "1px solid transparent"
+				});
+			}
+		});
+
+		$("#types input").each(function (i, el) {
+			if ($(el).closest(".form-group").hasClass("active") && $(el).val() == "") {
+				$(el).css({
+					border: "1px solid red"
+				});
+				hasError = true;
+			} else {
+				$(el).css({
+					border: "1px solid #ccc"
+				});
+			}
+		});
+
+		return hasError;
+	}
+
 	save.click(function () {
-		send(matrix, types, k, tableName, id);
+		let hasError = validation();
+
+		if (!hasError)
+			send(matrix, types, k, tableName, id);
 	});
 
 	add.click(function () {
@@ -124,7 +159,7 @@ $(document).ready(function () {
 
 			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
-				
+
 			});
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
@@ -133,30 +168,29 @@ $(document).ready(function () {
 			let options4 = $('<option value="4" ' + (types[k].type == 4 ? 'selected' : '') + '>formula</option>');
 			let options5 = $('<option value="5" ' + (types[k].type == 5 ? 'selected' : '') + '>table</option>');
 			let options6 = $('<option value="6" ' + (types[k].type == 6 ? 'selected' : '') + '>date</option>');
+			let options7 = $('<option value="7" ' + (types[k].type == 7 ? 'selected' : '') + '>numberation</option>');
 
 			let input1 = $("<input type='text' class='form-control' placeholder='name'>").val(types[k].name).change(function () {
 				types[k].name = $(this).val();
-				
+
 			});
 
 			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
-				
-			});
 
-			
+			});
 
 			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
 				types[k].table = $(this).val();
-				
+
 			});
 			let input5 = $("<input type='text' class='form-control' placeholder='key'>").val(types[k].key).change(function () {
 				types[k].key = $(this).val();
-				
+
 			});
 			let input6 = $("<input type='text' class='form-control' placeholder='value'>").val(types[k].value).change(function () {
 				types[k].value = $(this).val();
-				
+
 			});
 
 			options1.appendTo(select);
@@ -165,6 +199,7 @@ $(document).ready(function () {
 			options4.appendTo(select);
 			options5.appendTo(select);
 			options6.appendTo(select);
+			options7.appendTo(select);
 
 			input2.appendTo(form_group_formula);
 
@@ -192,7 +227,7 @@ $(document).ready(function () {
 				form_group_select.appendTo(left);
 			}
 
-			if (!types[k].variants || types[k].variants && types[k].variants.length == 0){
+			if (!types[k].variants || types[k].variants && types[k].variants.length == 0) {
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
 
