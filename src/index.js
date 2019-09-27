@@ -176,7 +176,7 @@ $(document).ready(function () {
 			});
 			// type for table
 			let select_table = $("<select class='form-control'>").val(types[k].table).change(function () {
-				
+
 				types[k].table = $(this).val();
 				console.log(types);
 			});
@@ -261,15 +261,17 @@ $(document).ready(function () {
 		for (let i = 0; i < matrix.length; i++) {
 
 			for (let j = 0; j < matrix[i].length; j++) {
-				sums[i] += matrix[i][j].colspan;
+				sums[i] += Number.parseInt(matrix[i][j].colspan);
 
 				if (matrix[i][j].rowspan > 1) {
-					for (let u = i + 1; u <= i + matrix[i][j].rowspan - 1; u++) {
-						sums[u] += matrix[i][j].colspan;
+					for (let u = i + 1; u <= i + Number.parseInt(matrix[i][j].rowspan) - 1; u++) {
+						sums[u] += Number.parseInt(matrix[i][j].colspan);
 					}
 				}
 			}
 		}
+
+		console.log("sums", sums);
 
 		max = Math.max(...sums);
 
@@ -278,11 +280,8 @@ $(document).ready(function () {
 				for (let k = 0; k < max - sums[i]; k++) {
 					matrix[i].push({
 						name: "",
-						name: "",
 						rowspan: 1,
 						colspan: 1,
-						x: i,
-						y: matrix[i].length
 					})
 				}
 			}
@@ -295,6 +294,37 @@ $(document).ready(function () {
 		$("div#table").html("");
 
 		let table = $("<table class='table table-striped'>");
+		let tbody = $("<tbody>").appendTo(table);
+
+		let tfoot = $("<tfoot>").appendTo(table);
+
+		let tfoot_tr = $("<tr>").appendTo(tfoot);
+
+		let max = null;
+		let sums = new Array(matrix.length).fill(0);
+
+		for (let i = 0; i < matrix.length; i++) {
+
+			for (let j = 0; j < matrix[i].length; j++) {
+				sums[i] += Number.parseInt(matrix[i][j].colspan);
+
+				if (matrix[i][j].rowspan > 1) {
+					for (let u = i + 1; u <= i + Number.parseInt(matrix[i][j].rowspan) - 1; u++) {
+						sums[u] += Number.parseInt(matrix[i][j].colspan);
+					}
+				}
+			}
+		}
+
+		max = Math.max(...sums);
+
+		for (let i = 0; i < max; i++) {
+			let th = $("<th class='text-center'>").appendTo(tfoot_tr);
+
+			$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
+				alert(1);
+			}).appendTo(th);
+		}
 
 		for (let i = 0; i < matrix.length; i++) {
 			let tr = $("<tr>");
@@ -303,13 +333,27 @@ $(document).ready(function () {
 				let td = $("<td tabindex='1'>").attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
 				let span = $('<input>').val(matrix[i][j].name).change(function () {
 					matrix[i][j].name = $(this).val();
-					console.log(matrix[i][j].name);
 				});
+
 				span.appendTo(td);
 				td.appendTo(tr);
 
 				let tool = $("<div class='icons'>").appendTo(td);
 				let x = $("<span>x</span>").appendTo(tool);
+
+				$('<a href="#!">').html('<i class="fa fa-plus">').click(function () {
+					matrix[i].splice(j + 1, 0, {
+						name: "",
+						rowspan: matrix[i][j],
+						colspan: 1,
+					});
+					createTable(matrix);
+				}).appendTo(tool);
+
+				$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
+					matrix[i].splice(j, 1);
+					createTable(matrix);
+				}).appendTo(tool);
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {
@@ -343,8 +387,6 @@ $(document).ready(function () {
 								name: "",
 								rowspan: 1,
 								colspan: 1,
-								x: a,
-								y: matrix[a].length
 							});
 						}
 
@@ -360,8 +402,6 @@ $(document).ready(function () {
 								name: "",
 								rowspan: 1,
 								colspan: 1,
-								x: i + matrix[i][j].rowspan,
-								y: matrix[i + matrix[i][j].rowspan].length
 							});
 						}
 
@@ -384,7 +424,8 @@ $(document).ready(function () {
 					}).appendTo(tool);
 				}
 			}
-			tr.appendTo(table);
+
+			tr.appendTo(tbody);
 		}
 
 		table.appendTo("div#table");
@@ -406,4 +447,6 @@ $(document).ready(function () {
 		createTable(matrix);
 		createTypes(types);
 	}
+
+
 });
