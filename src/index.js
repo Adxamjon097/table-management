@@ -7,6 +7,7 @@ $(document).ready(function () {
 
 	let matrix = [];
 	let types = [];
+	let table_select_types = [];
 
 	let k = null;
 	let tableName = null;
@@ -151,11 +152,47 @@ $(document).ready(function () {
 			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
 			let addInput = $('<div class="addInput"></div>');
 			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
-			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>')
+			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>');
+
+			let select_table = $("<select class='form-control table-select'>").val(types[k].table).change(function () {
+				
+				types[k].table = $(this).val();
+				console.log(types);
+			});
 
 			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
+				if(table_select_types.length == 0){
+					$.ajax({
+						method: "POST",
+						url: "http://eko.md.uz/api/default/tables"
+					}).done(function (response) {
+						
+						table_select_types = response;
+						console.log(table_select_types);
+						for (let z1 = 0; z1 < table_select_types.length; z1++) {
+							$opt = $('<option value=" ' + table_select_types[z1] + ' " >' + table_select_types[z1] + ' </option>');
+							$opt.appendTo($(".table-select"));
+							console.log(table_select_types[z1]);
+						}
+					});
+				}
+				
+				
+				
 			});
+			// type for table
+			
+
+			// let options_table1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>select1</option>');
+			// let options_table2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select2</option>');
+			// let options_table3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>select3</option>');
+
+			// options_table1.appendTo(select_table);
+			// options_table2.appendTo(select_table);
+			// options_table3.appendTo(select_table);
+
+			// type for table end
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
 			let options2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select</option>');
