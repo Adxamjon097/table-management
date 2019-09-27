@@ -25,7 +25,7 @@ $(document).ready(function () {
 				url: "http://eko.md.uz/api/default/index"
 			}).done(function (response) {
 				if (response.status == "ok") {
-					document.location = $("#route").data('url');
+					// document.location = $("#route").data('url');
 				}
 			});
 		}
@@ -103,8 +103,6 @@ $(document).ready(function () {
 					name: "",
 					formula: "",
 					table: "",
-					key: "",
-					value: "",
 				};
 			}
 
@@ -151,15 +149,12 @@ $(document).ready(function () {
 			let form_group_active2 = $('<div class="form-group active">');
 			let form_group_formula = $('<div class="form-group formula ' + (types[k].type == 4 ? "active" : "") + '">');
 			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
-			let form_group_table1 = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
-			let form_group_table2 = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
 			let addInput = $('<div class="addInput"></div>');
 			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>')
 
 			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
-
 			});
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
@@ -179,19 +174,22 @@ $(document).ready(function () {
 				types[k].formula = $(this).val();
 
 			});
-
-			let input4 = $("<input type='text' class='form-control' placeholder='table'>").val(types[k].table).change(function () {
+			// type for table
+			let select_table = $("<select class='form-control'>").val(types[k].table).change(function () {
+				
 				types[k].table = $(this).val();
-
+				console.log(types);
 			});
-			let input5 = $("<input type='text' class='form-control' placeholder='key'>").val(types[k].key).change(function () {
-				types[k].key = $(this).val();
 
-			});
-			let input6 = $("<input type='text' class='form-control' placeholder='value'>").val(types[k].value).change(function () {
-				types[k].value = $(this).val();
+			let options_table1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>select1</option>');
+			let options_table2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select2</option>');
+			let options_table3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>select3</option>');
 
-			});
+			options_table1.appendTo(select_table);
+			options_table2.appendTo(select_table);
+			options_table3.appendTo(select_table);
+
+			// type for table end
 
 			options1.appendTo(select);
 			options2.appendTo(select);
@@ -207,9 +205,7 @@ $(document).ready(function () {
 
 			input1.appendTo(form_group_active2);
 
-			input4.appendTo(form_group_table);
-			input5.appendTo(form_group_table1);
-			input6.appendTo(form_group_table2);
+			select_table.appendTo(form_group_table);
 
 			form_group_active2.appendTo(left);
 			form_group_active.appendTo(left);
@@ -217,7 +213,7 @@ $(document).ready(function () {
 			for (let r = 0; types[k].variants && r < types[k].variants.length; r++) {
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants[r]).change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
-
+					console.log(types[k].variants);
 				});
 
 				let form_group_select = $('<div class="form-group select item input-group ' + (r == 0 ? ' first ' : '') + (types[k].type == 2 ? "active" : "") + '">');
@@ -230,7 +226,7 @@ $(document).ready(function () {
 			if (!types[k].variants || types[k].variants && types[k].variants.length == 0) {
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
-
+					console.log(types[k].variants);
 				});
 
 				let form_group_select = $('<div class="form-group select item input-group first ' + (types[k].type == 2 ? "active" : "") + '">');
@@ -242,8 +238,6 @@ $(document).ready(function () {
 
 			form_group_formula.appendTo(left);
 			form_group_table.appendTo(left);
-			form_group_table1.appendTo(left);
-			form_group_table2.appendTo(left);
 			addInput.appendTo(left);
 
 			a.appendTo(form_group_last_select);
