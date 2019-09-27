@@ -38,12 +38,12 @@ $(document).ready(function () {
 		$("#table input").each(function (i, el) {
 			if ($(el).val() == "") {
 				$(el).css({
-					border: "1px solid red"
+					border: "1px solid #E64320"
 				});
 				hasError = true;
 			} else {
 				$(el).css({
-					border: "1px solid transparent"
+					border: "1px solid #ccc"
 				});
 			}
 		});
@@ -51,7 +51,7 @@ $(document).ready(function () {
 		$("#types input").each(function (i, el) {
 			if ($(el).closest(".form-group").hasClass("active") && $(el).val() == "") {
 				$(el).css({
-					border: "1px solid red"
+					border: "1px solid #E64320"
 				});
 				hasError = true;
 			} else {
@@ -246,6 +246,8 @@ $(document).ready(function () {
 			}
 
 			if (!types[k].variants || types[k].variants && types[k].variants.length == 0) {
+				if (!types[k].variants) types[k].variants = [];
+
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
 					console.log(types[k].variants);

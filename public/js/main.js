@@ -24,11 +24,11 @@ $(document).ready(function () {
 	$(document).on('blur', '#table input', function (){
 		if ($(this).val() == "") {
 			$(this).css({
-				border: "1px solid red"
+				border: "1px solid #E64320"
 			});
 		} else {
 			$(this).css({
-				border: "1px solid transparent"
+				border: "1px solid #ccc"
 			});
 		}
 	})
@@ -36,7 +36,7 @@ $(document).ready(function () {
 	$(document).on('blur', '#types input', function (){
 		if ($(this).val() == "") {
 			$(this).css({
-				border: "1px solid red"
+				border: "1px solid #E64320"
 			});
 		} else {
 			$(this).css({
