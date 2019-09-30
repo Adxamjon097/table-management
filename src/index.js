@@ -34,7 +34,6 @@ $(document).ready(function () {
 
 	function validation() {
 		var hasError = false;
-
 		$("#table input").each(function (i, el) {
 			if ($(el).val() == "") {
 				$(el).css({
@@ -133,7 +132,6 @@ $(document).ready(function () {
 		} else {
 			$("#table-name-error").text("");
 		}
-
 	});
 
 	function createTypes(types) {
@@ -181,18 +179,6 @@ $(document).ready(function () {
 				
 				
 			});
-			// type for table
-			
-
-			// let options_table1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>select1</option>');
-			// let options_table2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select2</option>');
-			// let options_table3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>select3</option>');
-
-			// options_table1.appendTo(select_table);
-			// options_table2.appendTo(select_table);
-			// options_table3.appendTo(select_table);
-
-			// type for table end
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
 			let options2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select</option>');
@@ -211,20 +197,7 @@ $(document).ready(function () {
 				types[k].formula = $(this).val();
 
 			});
-			// type for table
-			let select_table = $("<select class='form-control'>").val(types[k].table).change(function () {
-
-				types[k].table = $(this).val();
-				console.log(types);
-			});
-
-			let options_table1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>select1</option>');
-			let options_table2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select2</option>');
-			let options_table3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>select3</option>');
-
-			options_table1.appendTo(select_table);
-			options_table2.appendTo(select_table);
-			options_table3.appendTo(select_table);
+		
 
 			// type for table end
 
