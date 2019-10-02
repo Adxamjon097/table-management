@@ -60,6 +60,19 @@ $(document).ready(function () {
 			}
 		});
 
+		let cols = 0;
+
+		if (matrix.length > 0){
+			for (let i = 0; i < matrix[0].length; i++){
+				cols += matrix[0][i].colspan;
+			}
+
+			if (cols != types.length){
+				hasError = true;
+				alert ("Количества стобцов у шапки таблицы и тело таблицы должны быть равны");
+			}
+		}
+
 		return hasError;
 	}
 
@@ -137,7 +150,33 @@ $(document).ready(function () {
 	function createTypes(types) {
 		$("div#types").html("");
 
-		let tbody = $("<table class='table table-striped'>");
+		let table = $("<table class='table table-striped'>");
+		let tbody = $("<tbody>");
+		let thead = $("<thead>").appendTo(table);
+
+		let thead_tr = $("<tr>").appendTo(thead);
+
+		for (let k = 0; k < types.length; k++) {
+			let td = $('<td class="text-center">').appendTo(thead_tr); 
+			let close = $('<a href="#!">').html('<i class="fa fa-close"></i>').appendTo(td).click(function (){
+				if (types.length > 1){
+					types.splice(k, 1);
+					createTypes(types);
+				}
+			});
+			let plus = $('<a href="#!">').html('<i class="fa fa-plus"></i>').appendTo(td).click(function (){
+				types.splice(k + 1, 0, {
+					type: 1,
+					variants: [],
+					name: "",
+					formula: "",
+					table: "",
+				});
+				createTypes(types);
+			});
+
+		}
+
 		let tr = $("<tr>");
 
 		for (let k = 0; k < types.length; k++) {
@@ -148,6 +187,7 @@ $(document).ready(function () {
 			let form_group_active2 = $('<div class="form-group active">');
 			let form_group_formula = $('<div class="form-group formula ' + (types[k].type == 4 ? "active" : "") + '">');
 			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
+			let table_select = $("<select class='table-select form-control'>");
 			let addInput = $('<div class="addInput"></div>');
 			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>');
@@ -188,7 +228,7 @@ $(document).ready(function () {
 				types[k].formula = $(this).val();
 
 			});
-		
+
 
 			// type for table end
 
@@ -205,8 +245,6 @@ $(document).ready(function () {
 			select.appendTo(form_group_active);
 
 			input1.appendTo(form_group_active2);
-
-			select_table.appendTo(form_group_table);
 
 			form_group_active2.appendTo(left);
 			form_group_active.appendTo(left);
@@ -240,6 +278,7 @@ $(document).ready(function () {
 			}
 
 			form_group_formula.appendTo(left);
+			table_select.appendTo(form_group_table);
 			form_group_table.appendTo(left);
 			addInput.appendTo(left);
 
@@ -252,7 +291,8 @@ $(document).ready(function () {
 		}
 
 		tr.appendTo(tbody);
-		tbody.appendTo("div#types");
+		tbody.appendTo(table);
+		table.appendTo("div#types");
 	}
 
 	function normalize(matrix, min = false) {
@@ -264,7 +304,7 @@ $(document).ready(function () {
 			for (let j = 0; j < matrix[i].length; j++) {
 				sums[i] += Number.parseInt(matrix[i][j].colspan);
 
-				if (matrix[i][j].rowspan > 1) {
+				if (Number.parseInt(matrix[i][j].rowspan) > 1) {
 					for (let u = i + 1; u <= i + Number.parseInt(matrix[i][j].rowspan) - 1; u++) {
 						sums[u] += Number.parseInt(matrix[i][j].colspan);
 					}
@@ -291,19 +331,20 @@ $(document).ready(function () {
 
 			for (let i = 0; i < sums.length; i++) {
 				console.log(max, sums[i]);
+				console.log(matrix);
 
 				if (sums[i] > max) {
 					for (let k = 0; k < sums[i] - max; k++) {
-						if (matrix[i][matrix[i].length - 1].colspan == 1)
-							matrix[i].pop();
-						else
-							matrix[i][matrix[i].length - 1].colspan--;
+						if (matrix[i][matrix[i].length - 1]) {
+							if (matrix[i][matrix[i].length - 1].colspan == 1)
+								matrix[i].pop();
+							else
+								matrix[i][matrix[i].length - 1].colspan--;
+						}
 					}
 				}
 			}
 		}
-
-
 	}
 
 	function createTable(matrix, min = false) {
@@ -313,11 +354,11 @@ $(document).ready(function () {
 
 		let table = $("<table class='table table-striped'>");
 		let tbody = $("<tbody>").appendTo(table);
-
+		
+		/*
 		let tfoot = $("<tfoot>").appendTo(table);
 
 		let tfoot_tr = $("<tr>").appendTo(tfoot);
-
 		let max = null;
 		let sums = new Array(matrix.length).fill(0);
 
@@ -342,18 +383,24 @@ $(document).ready(function () {
 			$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
 				for (let j = 0; j < matrix[0].length; j++) {
 					if (matrix[0][j].colspan - 1 + j == i) {
-						matrix[0].splice(j, 1);
+						if (matrix[0][j].colspan == 1)
+							matrix[0].splice(j, 1);
+						else
+							matrix[0][j].colspan--;
 						createTable(matrix, true);
 					}
 				}
 			}).appendTo(th);
-		}
+		}*/
 
 		for (let i = 0; i < matrix.length; i++) {
 			let tr = $("<tr>");
 
 			for (let j = 0; j < matrix[i].length; j++) {
 				let td = $("<td tabindex='1'>").attr("colspan", matrix[i][j].colspan).attr("rowspan", matrix[i][j].rowspan);
+
+				matrix[i][j].refer = td.get(0);
+
 				let span = $('<input>').val(matrix[i][j].name).change(function () {
 					matrix[i][j].name = $(this).val();
 				});
@@ -373,24 +420,37 @@ $(document).ready(function () {
 					createTable(matrix);
 				}).appendTo(tool);
 
-				$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
-					matrix[i].splice(j, 1);
-					createTable(matrix, true);
+				$('<a href="#!">').html('<i class="fa fa-close tool-close">').click(function () {
+					console.log(matrix);
+					for (let t = 0; t < matrix.length; t++) {
+						for (let y = 0; y < matrix[t].length; y++) {
+							if (matrix.length > 1 && matrix[t].length > 1)
+							if (matrix[t][y].refer == $(this).closest("td").get(0)) {
+								if (matrix[t][y].colspan == 1)
+									matrix[t].splice(y, 1);
+								else
+									matrix[t][y].colspan--;
+
+								createTable(matrix, true);
+							}
+						}
+					}
+
 				}).appendTo(tool);
 
 				if (j != matrix[i].length - 1) {
 					let right = $("<a>").html('<i class="fa fa-arrow-right"></i>').click(function () {
 						for (let t = 0; t < matrix.length; t++) {
-							if (matrix[t][j + 1] && i - t == matrix[t][j + 1].rowspan - 1) {
+							if (matrix[t][j + 1] && i - t == Number.parseInt(matrix[t][j + 1].rowspan) - 1) {
 								matrix[t][j + 1].rowspan--;
 							}
 						}
 
 						let next = matrix[i][j + 1];
 
-						matrix[i][j].colspan += next.colspan;
+						matrix[i][j].colspan = Number.parseInt(matrix[i][j].colspan) + Number.parseInt(next.colspan);
 
-						for (let a = i; a <= i + matrix[i][j].rowspan - 1; a++) {
+						for (let a = i; a <= i + Number.parseInt(matrix[i][j].rowspan) - 1; a++) {
 							if (a == i)
 								matrix[a].splice(j + 1, 1);
 							else matrix[a].pop();
@@ -405,7 +465,7 @@ $(document).ready(function () {
 					let left = $("<a>").html('<i class="fa fa-arrow-left"></i>').click(function () {
 						matrix[i][j].colspan--;
 
-						for (let a = i; a < i + matrix[i][j].rowspan; a++) {
+						for (let a = i; a < i + Number.parseInt(matrix[i][j].rowspan); a++) {
 							matrix[a].push({
 								name: "",
 								rowspan: 1,
@@ -417,11 +477,11 @@ $(document).ready(function () {
 					}).appendTo(tool);
 				}
 
-				if (matrix[i][j].rowspan > 1) {
+				if (Number.parseInt(matrix[i][j].rowspan) > 1) {
 					let up = $("<a>").html('<i class="fa fa-arrow-up"></i>').click(function () {
 						matrix[i][j].rowspan--;
-						for (let a = 0; a < matrix[i][j].colspan; a++) {
-							matrix[i + matrix[i][j].rowspan].push({
+						for (let a = 0; a < Number.parseInt(matrix[i][j].colspan); a++) {
+							matrix[i + Number.parseInt(matrix[i][j].rowspan)].push({
 								name: "",
 								rowspan: 1,
 								colspan: 1,
@@ -432,10 +492,10 @@ $(document).ready(function () {
 					}).appendTo(tool);
 				}
 
-				if (i + matrix[i][j].rowspan - 1 != matrix.length - 1) {
+				if (i + Number.parseInt(matrix[i][j].rowspan) - 1 != matrix.length - 1) {
 					let down = $("<a>").html('<i class="fa fa-arrow-down"></i>').click(function () {
-						for (let a = 0; a < matrix[i][j].colspan; a++) {
-							let element = matrix[i + matrix[i][j].rowspan];
+						for (let a = 0; a < Number.parseInt(matrix[i][j].colspan); a++) {
+							let element = matrix[i + Number.parseInt(matrix[i][j].rowspan)];
 							if (element) {
 								element.pop();
 							}
@@ -452,6 +512,15 @@ $(document).ready(function () {
 		}
 
 		table.appendTo("div#table");
+
+		let add_row = $('<a href="#!" class="btn btn-default">').html('Добавить строку <i class="fa fa-plus"></i>').click(function (){
+			matrix.push([]);
+			createTable(matrix);
+		}).appendTo("div#table");
+		let remove_row = $('<a href="#!" class="btn btn-default">').html('Удалить строку <i class="fa fa-close"></i>').click(function (){
+			matrix.pop();
+			createTable(matrix);
+		}).appendTo("div#table");
 	}
 
 	if ($("#update-table-form").length > 0) {
