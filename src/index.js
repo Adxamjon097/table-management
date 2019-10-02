@@ -154,20 +154,14 @@ $(document).ready(function () {
 			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>');
 
-			let select_table = $("<select class='form-control table-select'>").val(types[k].table).change(function () {
-				
-				types[k].table = $(this).val();
-				console.log(types);
-			});
-
 			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
-				if(table_select_types.length == 0){
+				if (table_select_types.length == 0) {
 					$.ajax({
 						method: "POST",
 						url: "http://eko.md.uz/api/default/tables"
 					}).done(function (response) {
-						
+
 						table_select_types = response;
 						console.log(table_select_types);
 						for (let z1 = 0; z1 < table_select_types.length; z1++) {
@@ -177,22 +171,10 @@ $(document).ready(function () {
 						}
 					});
 				}
-				
-				
-				
+
+
+
 			});
-			// type for table
-			
-
-			// let options_table1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>select1</option>');
-			// let options_table2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select2</option>');
-			// let options_table3 = $('<option value="3" ' + (types[k].type == 3 ? 'selected' : '') + '>select3</option>');
-
-			// options_table1.appendTo(select_table);
-			// options_table2.appendTo(select_table);
-			// options_table3.appendTo(select_table);
-
-			// type for table end
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
 			let options2 = $('<option value="2" ' + (types[k].type == 2 ? 'selected' : '') + '>select</option>');
@@ -291,7 +273,7 @@ $(document).ready(function () {
 		tbody.appendTo("div#types");
 	}
 
-	function normalize(matrix) {
+	function normalize(matrix, min = false) {
 		var max = null;
 		var sums = new Array(matrix.length).fill(0);
 
@@ -308,25 +290,42 @@ $(document).ready(function () {
 			}
 		}
 
-		console.log("sums", sums);
+		if (!min) {
+			max = Math.max(...sums);
 
-		max = Math.max(...sums);
+			for (let i = 0; i < sums.length; i++) {
+				if (sums[i] != max) {
+					for (let k = 0; k < max - sums[i]; k++) {
+						matrix[i].push({
+							name: "",
+							rowspan: 1,
+							colspan: 1,
+						})
+					}
+				}
+			}
+		} else {
+			max = Math.min(...sums);
 
-		for (let i = 0; i < sums.length; i++) {
-			if (sums[i] != max) {
-				for (let k = 0; k < max - sums[i]; k++) {
-					matrix[i].push({
-						name: "",
-						rowspan: 1,
-						colspan: 1,
-					})
+			for (let i = 0; i < sums.length; i++) {
+				console.log(max, sums[i]);
+
+				if (sums[i] > max) {
+					for (let k = 0; k < sums[i] - max; k++) {
+						if (matrix[i][matrix[i].length - 1].colspan == 1)
+							matrix[i].pop();
+						else
+							matrix[i][matrix[i].length - 1].colspan--;
+					}
 				}
 			}
 		}
+
+
 	}
 
-	function createTable(matrix) {
-		normalize(matrix);
+	function createTable(matrix, min = false) {
+		normalize(matrix, min);
 
 		$("div#table").html("");
 
@@ -359,7 +358,12 @@ $(document).ready(function () {
 			let th = $("<th class='text-center'>").appendTo(tfoot_tr);
 
 			$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
-				alert(1);
+				for (let j = 0; j < matrix[0].length; j++) {
+					if (matrix[0][j].colspan - 1 + j == i) {
+						matrix[0].splice(j, 1);
+						createTable(matrix, true);
+					}
+				}
 			}).appendTo(th);
 		}
 
@@ -389,7 +393,7 @@ $(document).ready(function () {
 
 				$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
 					matrix[i].splice(j, 1);
-					createTable(matrix);
+					createTable(matrix, true);
 				}).appendTo(tool);
 
 				if (j != matrix[i].length - 1) {
