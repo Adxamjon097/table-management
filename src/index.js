@@ -1,8 +1,11 @@
+let FormulaParser = require('hot-formula-parser').Parser;
+let parser = new FormulaParser();
+
 $(document).ready(function () {
 
 	let add = $("button#add");
 	let content = $("#content");
-	let save = $("#save");
+	let save = $("button#save");
 	let add_row = $("#table-view-add-row");
 	let remove_row = $("#table-view-remove-row");
 	var id = $("#update-table-id").length > 0 ? $("#update-table-id").val() : null;
@@ -15,6 +18,15 @@ $(document).ready(function () {
 	let tableName = null;
 
 	function send(matrix, types, count, name, id = null) {
+
+		let m = [...matrix];
+
+		for (let i = 0; i < m.length; i++) {
+			for (let j = 0; j < m[i].length; j++) {
+				m[i][j].refer = null;
+			}
+		}
+
 		if (matrix.length > 0 && types.length > 0 && count && name) {
 			$.ajax({
 				method: "POST",
@@ -28,7 +40,10 @@ $(document).ready(function () {
 				url: "http://eko.md.uz/api/default/index"
 			}).done(function (response) {
 				if (response.status == "ok") {
-					// document.location = $("#route").data('url');
+					let url = $("#route").data('url');
+					if (url)
+						document.location = url;
+					else document.location.reload();
 				}
 			});
 		}
@@ -64,40 +79,41 @@ $(document).ready(function () {
 
 		let cols = 0;
 
-		if (matrix.length > 0){
-			for (let i = 0; i < matrix[0].length; i++){
-				cols += matrix[0][i].colspan;
+		if (matrix.length > 0) {
+			for (let i = 0; i < matrix[0].length; i++) {
+				cols += Number.parseInt(matrix[0][i].colspan);
 			}
 
-			if (cols != types.length){
+
+			if (cols != types.length) {
 				hasError = true;
-				alert ("Количества стобцов у шапки таблицы и тело таблицы должны быть равны");
+				alert("Количества стобцов у шапки таблицы и тело таблицы должны быть равны");
 			}
 		}
 
 		return hasError;
 	}
 
-	add_row.click(function (){
+	add_row.click(function () {
 		let clone = $("#table-view table tbody tr").last().clone();
 		clone.appendTo("#table-view table tbody");
 		clone.find("span.numberation").text(Number.parseInt(clone.find("span.numberation").text()) + 1);
 		clone.find("input").val("");
-		clone.find("input, select").each(function (i, el){
+		clone.find("input, select").each(function (i, el) {
 			let name = el.name;
 			let parts = name.split("[").join(",").split("][").join(",").split("]").join(",").split(",");
 			parts = parts.filter((val) => val != "");
 
-			if (parts.length > 0){
+			if (parts.length > 0) {
 				el.name = parts[0] + "[" + (Number.parseInt(parts[1]) + 1) + "][" + parts[2] + "]";
 			}
 		})
 	});
 
-	remove_row.click(function (){
+	remove_row.click(function () {
 		let tr = $("#table-view table tbody tr");
 
-		if (tr.length > 1){
+		if (tr.length > 1) {
 			tr.last().remove();
 		}
 	});
@@ -185,14 +201,14 @@ $(document).ready(function () {
 		let thead_tr = $("<tr>").appendTo(thead);
 
 		for (let k = 0; k < types.length; k++) {
-			let td = $('<td class="text-center">').appendTo(thead_tr); 
-			let close = $('<a href="#!">').html('<i class="fa fa-close"></i>').appendTo(td).click(function (){
-				if (types.length > 1){
+			let td = $('<td class="text-center">').appendTo(thead_tr);
+			let close = $('<a href="#!">').html('<i class="fa fa-close"></i>').appendTo(td).click(function () {
+				if (types.length > 1) {
 					types.splice(k, 1);
 					createTypes(types);
 				}
 			});
-			let plus = $('<a href="#!">').html('<i class="fa fa-plus"></i>').appendTo(td).click(function (){
+			let plus = $('<a href="#!">').html('<i class="fa fa-plus"></i>').appendTo(td).click(function () {
 				types.splice(k + 1, 0, {
 					type: 1,
 					variants: [],
@@ -247,9 +263,22 @@ $(document).ready(function () {
 			let options6 = $('<option value="6" ' + (types[k].type == 6 ? 'selected' : '') + '>date</option>');
 			let options7 = $('<option value="7" ' + (types[k].type == 7 ? 'selected' : '') + '>numberation</option>');
 
-			let input1 = $("<input type='text' class='form-control' placeholder='name'>").val(types[k].name).change(function () {
-				types[k].name = $(this).val();
+			let input1 = $("<input type='text' class='form-control' placeholder='name' name='name'>").val(types[k].name).change(function () {
+				let old_name = types[k].name;
+				let found = false;
+				let _this = this;
 
+				$('input[name=name]').not(this).each(function (i, el) {
+					if ($(el).val() == $(_this).val())
+						found = true;
+				});
+
+				if (found) {
+					alert("Название столбцов должен быть уникальным");
+					$(this).val(old_name);
+				} else {
+					types[k].name = $(this).val();
+				}
 			});
 
 			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
@@ -382,7 +411,7 @@ $(document).ready(function () {
 
 		let table = $("<table class='table table-striped'>");
 		let tbody = $("<tbody>").appendTo(table);
-		
+
 		/*
 		let tfoot = $("<tfoot>").appendTo(table);
 
@@ -453,14 +482,14 @@ $(document).ready(function () {
 					for (let t = 0; t < matrix.length; t++) {
 						for (let y = 0; y < matrix[t].length; y++) {
 							if (matrix.length > 1 && matrix[t].length > 1)
-							if (matrix[t][y].refer == $(this).closest("td").get(0)) {
-								if (matrix[t][y].colspan == 1)
-									matrix[t].splice(y, 1);
-								else
-									matrix[t][y].colspan--;
+								if (matrix[t][y].refer == $(this).closest("td").get(0)) {
+									if (matrix[t][y].colspan == 1)
+										matrix[t].splice(y, 1);
+									else
+										matrix[t][y].colspan--;
 
-								createTable(matrix, true);
-							}
+									createTable(matrix, true);
+								}
 						}
 					}
 
@@ -541,11 +570,11 @@ $(document).ready(function () {
 
 		table.appendTo("div#table");
 
-		let add_row = $('<a href="#!" class="btn btn-default">').html('Добавить строку <i class="fa fa-plus"></i>').click(function (){
+		let add_row = $('<a href="#!" class="btn btn-default">').html('Добавить строку <i class="fa fa-plus"></i>').click(function () {
 			matrix.push([]);
 			createTable(matrix);
 		}).appendTo("div#table");
-		let remove_row = $('<a href="#!" class="btn btn-default">').html('Удалить строку <i class="fa fa-close"></i>').click(function (){
+		let remove_row = $('<a href="#!" class="btn btn-default">').html('Удалить строку <i class="fa fa-close"></i>').click(function () {
 			matrix.pop();
 			createTable(matrix);
 		}).appendTo("div#table");
@@ -568,5 +597,26 @@ $(document).ready(function () {
 		createTypes(types);
 	}
 
+	$(document).on('change', '.number-input', function () {
+		let _this = this;
+
+		$(this).closest("tr").find('.number-input').each((i, el) => {
+			let name = $(el).data("name");
+			let value = $(el).val();
+
+			if (name)
+				parser.setVariable(name , value);
+		});
+		$(this).closest("tr").find('.formula-input').each((i, el) => {
+			let formula = $(el).data("formula");
+			console.log(parser.parse(formula));
+
+			if (formula) {
+				let res = parser.parse(formula);
+				if (!res.error)
+					$(el).val(res.result);
+			}
+		});
+	});
 
 });
