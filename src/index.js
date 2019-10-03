@@ -3,6 +3,8 @@ $(document).ready(function () {
 	let add = $("button#add");
 	let content = $("#content");
 	let save = $("#save");
+	let add_row = $("#table-view-add-row");
+	let remove_row = $("#table-view-remove-row");
 	var id = $("#update-table-id").length > 0 ? $("#update-table-id").val() : null;
 
 	let matrix = [];
@@ -76,6 +78,30 @@ $(document).ready(function () {
 		return hasError;
 	}
 
+	add_row.click(function (){
+		let clone = $("#table-view table tbody tr").last().clone();
+		clone.appendTo("#table-view table tbody");
+		clone.find("span.numberation").text(Number.parseInt(clone.find("span.numberation").text()) + 1);
+		clone.find("input").val("");
+		clone.find("input, select").each(function (i, el){
+			let name = el.name;
+			let parts = name.split("[").join(",").split("][").join(",").split("]").join(",").split(",");
+			parts = parts.filter((val) => val != "");
+
+			if (parts.length > 0){
+				el.name = parts[0] + "[" + (Number.parseInt(parts[1]) + 1) + "][" + parts[2] + "]";
+			}
+		})
+	});
+
+	remove_row.click(function (){
+		let tr = $("#table-view table tbody tr");
+
+		if (tr.length > 1){
+			tr.last().remove();
+		}
+	});
+
 	save.click(function () {
 		let hasError = validation();
 
@@ -146,6 +172,8 @@ $(document).ready(function () {
 			$("#table-name-error").text("");
 		}
 	});
+
+
 
 	function createTypes(types) {
 		$("div#types").html("");
