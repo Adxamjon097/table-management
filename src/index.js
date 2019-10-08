@@ -235,28 +235,15 @@ $(document).ready(function () {
 			let form_group_active2 = $('<div class="form-group active">');
 			let form_group_formula = $('<div class="form-group formula ' + (types[k].type == 4 ? "active" : "") + '">');
 			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
-			let table_select = $("<select class='table-select form-control'>");
+			let table_select = $("<select class='table-select form-control' data-selected='" + types[k].table + "' >").val(types[k].table).change(function () {
+				types[k].table = $(this).val();
+			});
 			let addInput = $('<div class="addInput"></div>');
 			let form_group_last_select = $('<div class="form-group last select ' + (types[k].type == 2 ? "active" : "") + '"></div>');
 			let a = $('<a href="#!" class="addInput"><i class="fa fa-plus"></i></a>');
 
 			let select = $("<select class='type-select form-control'>").val(types[k].type).change(function () {
 				types[k].type = $(this).val();
-				if (table_select_types.length == 0) {
-					$.ajax({
-						method: "POST",
-						url: "http://eko.md.uz/api/default/tables"
-					}).done(function (response) {
-
-						table_select_types = response;
-						console.log(table_select_types);
-						for (let z1 = 0; z1 < table_select_types.length; z1++) {
-							$opt = $('<option value=" ' + table_select_types[z1] + ' " >' + table_select_types[z1] + ' </option>');
-							$opt.appendTo($(".table-select"));
-							console.log(table_select_types[z1]);
-						}
-					});
-				}
 			});
 
 			let options1 = $('<option value="1" ' + (types[k].type == 1 ? 'selected' : '') + '>number</option>');
@@ -354,6 +341,22 @@ $(document).ready(function () {
 		tr.appendTo(tbody);
 		tbody.appendTo(table);
 		table.appendTo("div#types");
+
+		if (table_select_types.length == 0) {
+			$.ajax({
+				method: "POST",
+				url: "http://eko.md.uz/api/default/tables"
+			}).done(function (response) {
+				table_select_types = response;
+
+				$(".table-select").each(function (i, el) {
+					for (let z1 = 0; z1 < table_select_types.length; z1++) {
+						$opt = $('<option value="' + table_select_types[z1] + '" ' + ($(el).data("selected") == table_select_types[z1] ? 'selected' : '') + '>' + table_select_types[z1] + '</option>');
+						$opt.appendTo($(el));
+					}
+				});
+			});
+		}
 	}
 
 	function normalize(matrix, min = false) {
@@ -609,7 +612,7 @@ $(document).ready(function () {
 			let value = $(el).val();
 
 			if (name)
-				parser.setVariable(name , value);
+				parser.setVariable(name, value);
 		});
 		$(this).closest("tr").find('.formula-input').each((i, el) => {
 			let formula = $(el).data("formula");
