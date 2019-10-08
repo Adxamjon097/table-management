@@ -129,6 +129,10 @@ $(document).ready(function () {
 		let n = $("input#n").val();
 		let m = $("input#m").val();
 		k = $("input#k").val();
+		if(!k || k < 0){
+			k = 99;
+		}
+
 		tableName = $("input#table-name").val();
 
 		if (n && m && k && n > 0 && m > 0 && k > 0 && tableName && tableName != "") {
