@@ -28,6 +28,8 @@ $(document).ready(function () {
 		}
 
 		if (matrix.length > 0 && types.length > 0 && count && name) {
+			let api = $("#api").data('url');
+
 			$.ajax({
 				method: "POST",
 				data: {
@@ -37,7 +39,7 @@ $(document).ready(function () {
 					name,
 					id
 				},
-				url: "http://eko.md.uz/api/default/index"
+				url: api ? api : "http://eko.md.uz/api/default/index"
 			}).done(function (response) {
 				if (response.status == "ok") {
 					let url = $("#route").data('url');
@@ -129,7 +131,7 @@ $(document).ready(function () {
 		let n = $("input#n").val();
 		let m = $("input#m").val();
 		k = $("input#k").val();
-		if(!k || k < 0){
+		if (!k || k < 0) {
 			k = 99;
 		}
 
@@ -604,26 +606,79 @@ $(document).ready(function () {
 		createTypes(types);
 	}
 
-	$(document).on('change', '.number-input', function () {
+	$(document).on('change', '.byhand', function () {
 		let _this = this;
 
-		$(this).closest("tr").find('.number-input').each((i, el) => {
-			let name = $(el).data("name");
-			let value = $(el).val();
+		$(".custom-formula").each(function (i, el) {
+			let formula = $(el).data("custom-formula") + "";
 
-			if (name)
-				parser.setVariable(name, value);
-		});
+			if (formula.startsWith("=")) {
+				formula = formula.replace("=", "");
+			}
+
+			while (formula.match(/SUM\((.*?)\)/)) {
+				let sum = 0;
+				let res = formula.match(/SUM\((.*?)\)/);
+
+				if (res && res.length > 1) {
+					let cellstring = res[1];
+
+					let cells = cellstring.split(":");
+
+					if (cells.length > 1) {
+						let [first, second] = cells;
+
+						let symbols = first.match(/[A-Z]+/) ? first.match(/[A-Z]+/)[0] : null;
+						let begin = first.match(/[0-9]+/) ? first.match(/[0-9]+/)[0] : null;
+						let end = second.match(/[0-9]+/) ? second.match(/[0-9]+/)[0] : null;
+
+						for (let i = Number.parseInt(begin); i <= Number.parseInt(end); i++) {
+							let value = $("input[data-cell-name=" + (symbols + i) + "]").val();
+
+							if (value) {
+								sum += Number.parseFloat(value);
+							}
+						}
+					}
+				}
+
+				formula = formula.replace(/SUM\((.*?)\)/, sum);
+			}
+
+			let answer = parser.parse(formula);
+			if (!answer.error)
+				$(el).val(answer.result).trigger('change');
+			else
+				$(el).val("");
+		})
+	});
+
+	$(document).on('change', '.number-input', function () {
+		let _this = this;
+		
 		$(this).closest("tr").find('.formula-input').each((i, el) => {
+			$(_this).closest("tr").find('.number-input').each((i, el) => {
+				let name = $(el).data("name");
+	
+				let value = $(el).val();
+	
+				if (name)
+					parser.setVariable(name, value);
+			});
+	
 			let formula = $(el).data("formula");
-			console.log(parser.parse(formula));
 
 			if (formula) {
 				let res = parser.parse(formula);
+
 				if (!res.error)
 					$(el).val(res.result);
+				else
+					$(el).val("");
 			}
 		});
+
 	});
+
 
 });

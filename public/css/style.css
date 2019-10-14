@@ -18,7 +18,6 @@
 
 #types table tr td {
 	border: 1px solid #ccc;
-	height: 30px;
 	position: relative;
 }
 
@@ -33,10 +32,11 @@
 #types div.item.first {
 	width: 100%;
 }
-#types div.item.first input{
+
+#types div.item.first input {
 	width: 100%;
 	border-bottom-right-radius: 4px !important;
-    border-top-right-radius: 4px !important;
+	border-top-right-radius: 4px !important;
 }
 
 #types table tr td {
@@ -55,6 +55,7 @@
 	background-color: black;
 	border-radius: 5px;
 	left: 50%;
+	-webkit-transform: translateX(-50%) translateY(-8px);
 	transform: translateX(-50%) translateY(-8px);
 	display: none;
 	/* opacity: 0; */
@@ -76,6 +77,40 @@
 #table div.icons span:hover {
 	cursor: pointer;
 }
+
+
+#table-view div.icons {
+	position: absolute;
+	bottom: 100%;
+	width: 170px;
+	padding: 5px 0px;
+	text-align: center;
+	background-color: black;
+	border-radius: 5px;
+	left: 50%;
+	-webkit-transform: translateX(-50%) translateY(-8px);
+	transform: translateX(-50%) translateY(-8px);
+	display: none;
+	/* opacity: 0; */
+	/* pointer-events: none; */
+	/* transition: all 0.4s ease-in-out; */
+}
+
+#table-view div.icons span {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 3px;
+	color: red;
+	font-weight: bold;
+	line-height: 10px;
+	font-size: 12px;
+}
+
+#table-view div.icons span:hover {
+	cursor: pointer;
+}
+
 
 /* #table table tr td:focus div.icons {
 	opacity: 1;
@@ -104,6 +139,20 @@
 	display: block;
 	position: absolute;
 	top: 80%;
+	-webkit-transform: rotate(-45deg) translate(-50%, -50%);
+	transform: rotate(-45deg) translate(-50%, -50%);
+	z-index: -1;
+	width: 10px;
+	height: 10px;
+	background-color: black;
+	left: 50%;
+}
+#table-view div.icons::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 80%;
+	-webkit-transform: rotate(-45deg) translate(-50%, -50%);
 	transform: rotate(-45deg) translate(-50%, -50%);
 	z-index: -1;
 	width: 10px;
@@ -129,8 +178,27 @@
 	font-size: 14px;
 	color: red;
 }
+#table-view div.icons::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 15px;
+	position: absolute;
+	bottom: -15px;
+}
+
+#table-view div.icons a {
+	margin: 0px 5px;
+}
+
+#table-view div.icons a i.fa {
+	font-size: 14px;
+	color: red;
+}
 
 #types div.wrap {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 }
 
@@ -145,6 +213,7 @@
 #types table thead td {
 	background-color: black;
 }
+
 #types table thead td a {
 	font-size: 14px;
 	color: red;
@@ -170,6 +239,7 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 }
 
@@ -181,7 +251,7 @@
 	vertical-align: middle !important;
 }
 
--#table-view tbody td {
+#table-view tbody td {
 	padding: 0 !important;
 	vertical-align: middle;
 }
@@ -198,9 +268,9 @@
 
 #table-view tbody td select {
 	width: 100%;
-    height: 41px;
-    text-align: center;
-    background: transparent;
+	height: 41px;
+	text-align: center;
+	background: transparent;
 	-webkit-appearance: button;
 	-webkit-border-radius: 2px;
 	-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
@@ -217,4 +287,34 @@
 	white-space: nowrap;
 	text-align-last: center;
 }
+
+#types {
+	overflow-x: auto;
+}
+
+#types table, #table table {
+	table-layout: fixed;
+	width: unset !important;
+}
+
+#types tr td {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+}
+
+#table tr td {
+	width: 150px;
+	max-width: 150%;
+	min-width: 150px;
+}
+
+#table {
+	overflow-x: auto;
+	padding-top: 37px;
+	margin-top: -37px;
+}
+
+#table-view td {
+	position: relative;
 }

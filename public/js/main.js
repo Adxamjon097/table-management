@@ -87,9 +87,20 @@ $(document).ready(function () {
 		}
 	}
 
+	$("#table").on("scroll", function (){
+		$("#types").prop("scrollLeft", this.scrollLeft);
+	});
+	$("#types").on("scroll", function (){
+		$("#table").prop("scrollLeft", this.scrollLeft);
+	});
 
+	
+	$(document).on('click', "#table-view div.icons span", function () {
+		$(this).parent("div.icons").fadeOut(300);
+	});
+
+	$(document).on('focus', '#table-view table tr td input', function () {
+		$(this).siblings('div.icons').fadeIn(300);
+		$('div.icons').not($(this).siblings('div.icons')).fadeOut(300);
+	});
 });
-
-
-
-
