@@ -256,23 +256,23 @@ $(document).ready(function () {
 			let options6 = $('<option value="6" ' + (types[k].type == 6 ? 'selected' : '') + '>date</option>');
 			let options7 = $('<option value="7" ' + (types[k].type == 7 ? 'selected' : '') + '>numberation</option>');
 
-			let input1 = $("<input type='text' class='form-control' placeholder='name' name='name'>").val(types[k].name).change(function () {
-				let old_name = types[k].name;
-				let found = false;
-				let _this = this;
+			let count = types.length;
+			let max = 26;
+			let length = count / max;
 
-				$('input[name=name]').not(this).each(function (i, el) {
-					if ($(el).val() == $(_this).val())
-						found = true;
-				});
+			let symbol = "";
 
-				if (found) {
-					alert("Название столбцов должен быть уникальным");
-					$(this).val(old_name);
-				} else {
-					types[k].name = $(this).val();
-				}
-			});
+			if (Number.parseInt(k / max) > 0)
+			symbol = String.fromCharCode(65 + Number.parseInt(k / max) - 1);
+			else
+			symbol = "";
+
+			
+			symbol += String.fromCharCode(65 + (k % max));
+			
+			types[k].name = symbol;
+			
+			let input1 = $("<input type='text' class='form-control' readonly placeholder='name' name='name'>").val(types[k].name).change(function () {});
 
 			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
@@ -302,7 +302,6 @@ $(document).ready(function () {
 			for (let r = 0; types[k].variants && r < types[k].variants.length; r++) {
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants[r]).change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
-					console.log(types[k].variants);
 				});
 
 				let form_group_select = $('<div class="form-group select item input-group ' + (r == 0 ? ' first ' : '') + (types[k].type == 2 ? "active" : "") + '">');
@@ -317,7 +316,6 @@ $(document).ready(function () {
 
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").change(function () {
 					types[k].variants[$(this).closest("td").find("input[name=variant]").index(this)] = $(this).val();
-					console.log(types[k].variants);
 				});
 
 				let form_group_select = $('<div class="form-group select item input-group first ' + (types[k].type == 2 ? "active" : "") + '">');
@@ -396,8 +394,6 @@ $(document).ready(function () {
 			max = Math.min(...sums);
 
 			for (let i = 0; i < sums.length; i++) {
-				console.log(max, sums[i]);
-				console.log(matrix);
 
 				if (sums[i] > max) {
 					for (let k = 0; k < sums[i] - max; k++) {
@@ -487,7 +483,6 @@ $(document).ready(function () {
 				}).appendTo(tool);
 
 				$('<a href="#!">').html('<i class="fa fa-close tool-close">').click(function () {
-					console.log(matrix);
 					for (let t = 0; t < matrix.length; t++) {
 						for (let y = 0; y < matrix[t].length; y++) {
 							if (matrix.length > 1 && matrix[t].length > 1)
