@@ -8,6 +8,8 @@ $(document).ready(function () {
 	let save = $("button#save");
 	let add_row = $("#table-view-add-row");
 	let remove_row = $("#table-view-remove-row");
+	let add_row_in = $("#table-view-add-row-in");
+	let remove_row_in = $("#table-view-remove-row-in");
 	var id = $("#update-table-id").length > 0 ? $("#update-table-id").val() : null;
 
 	let matrix = [];
@@ -29,23 +31,28 @@ $(document).ready(function () {
 
 		if (matrix.length > 0 && types.length > 0 && count && name) {
 			let api = $("#api").data('url');
-
+			save.attr('disabled', true);
 			$.ajax({
 				method: "POST",
 				data: {
-					matrix,
-					types,
-					count,
-					name,
-					id
+					data: JSON.stringify({
+						matrix,
+						types,
+						count,
+						name,
+						id
+					})
 				},
-				url: api ? api : "http://eko.md.uz/api/default/index"
+				url: api ? api : "http://eko.md.uz/api/default/index",
+				dataType: "json",
 			}).done(function (response) {
 				if (response.status == "ok") {
 					let url = $("#route").data('url');
 					if (url)
 						document.location = url;
 					else document.location.reload();
+				} else {
+					save.attr('disabled', false);
 				}
 			});
 		}
@@ -120,8 +127,37 @@ $(document).ready(function () {
 		}
 	});
 
+	add_row_in.click(function () {
+		let clone = $(this).closest("tr").clone();
+		$(this).closest("tr").after(clone);
+		clone.find("span.numberation").text(Number.parseInt(clone.find("span.numberation").text()) + 1);
+		clone.find("input").val("");
+		clone.find("input, select").each(function (i, el) {
+			let name = el.name;
+			let parts = name.split("[").join(",").split("][").join(",").split("]").join(",").split(",");
+			parts = parts.filter((val) => val != "");
+
+			if (parts.length > 0) {
+				el.name = parts[0] + "[" + (Number.parseInt(parts[1]) + 1) + "][" + parts[2] + "]";
+			}
+		})
+	});
+
+	remove_row_in.click(function () {
+		let tr = $("#table-view table tbody tr");
+
+		if (tr.length > 1) {
+			tr.last().remove();
+		}
+	});
+
 	save.click(function () {
 		let hasError = validation();
+
+		if ($("#update-table-form").length > 0) {
+			let name = $("#update-table-name").val();
+			tableName = name;
+		}
 
 		if (!hasError)
 			send(matrix, types, k, tableName, id);
@@ -159,7 +195,7 @@ $(document).ready(function () {
 
 			for (let i = 0; i < n; i++) {
 				types[i] = {
-					type: 1,
+					type: 3,
 					variants: [],
 					name: "",
 					formula: "",
@@ -263,16 +299,16 @@ $(document).ready(function () {
 			let symbol = "";
 
 			if (Number.parseInt(k / max) > 0)
-			symbol = String.fromCharCode(65 + Number.parseInt(k / max) - 1);
+				symbol = String.fromCharCode(65 + Number.parseInt(k / max) - 1);
 			else
-			symbol = "";
+				symbol = "";
 
-			
+
 			symbol += String.fromCharCode(65 + (k % max));
-			
+
 			types[k].name = symbol;
-			
-			let input1 = $("<input type='text' class='form-control' readonly placeholder='name' name='name'>").val(types[k].name).change(function () {});
+
+			let input1 = $("<input type='text' class='form-control' readonly placeholder='name' name='name'>").val(types[k].name).change(function () { });
 
 			let input2 = $("<input type='text' class='form-control' placeholder='formula'>").val(types[k].formula).change(function () {
 				types[k].formula = $(this).val();
@@ -282,9 +318,9 @@ $(document).ready(function () {
 
 			// type for table end
 
+			options3.appendTo(select);
 			options1.appendTo(select);
 			options2.appendTo(select);
-			options3.appendTo(select);
 			options4.appendTo(select);
 			options5.appendTo(select);
 			options6.appendTo(select);
@@ -476,7 +512,7 @@ $(document).ready(function () {
 				$('<a href="#!">').html('<i class="fa fa-plus">').click(function () {
 					matrix[i].splice(j + 1, 0, {
 						name: "",
-						rowspan: matrix[i][j],
+						rowspan: matrix[i][j].rowspan,
 						colspan: 1,
 					});
 					createTable(matrix);
@@ -648,19 +684,91 @@ $(document).ready(function () {
 		})
 	});
 
-	$(document).on('change', '.number-input', function () {
-		let _this = this;
-		
+
+	$(".custom-formula").each(function (i, el) {
+		let formula = $(el).data("custom-formula") + "";
+
+		if (formula.startsWith("=")) {
+			formula = formula.replace("=", "");
+		}
+
+		while (formula.match(/SUM\((.*?)\)/)) {
+			let sum = 0;
+			let res = formula.match(/SUM\((.*?)\)/);
+
+			if (res && res.length > 1) {
+				let cellstring = res[1];
+
+				let cells = cellstring.split(":");
+
+				if (cells.length > 1) {
+					let [first, second] = cells;
+
+					let symbols = first.match(/[A-Z]+/) ? first.match(/[A-Z]+/)[0] : null;
+					let begin = first.match(/[0-9]+/) ? first.match(/[0-9]+/)[0] : null;
+					let end = second.match(/[0-9]+/) ? second.match(/[0-9]+/)[0] : null;
+
+					for (let i = Number.parseInt(begin); i <= Number.parseInt(end); i++) {
+						let value = $("input[data-cell-name=" + (symbols + i) + "]").val();
+
+						if (value) {
+							sum += Number.parseFloat(value);
+						}
+					}
+				}
+			}
+
+			formula = formula.replace(/SUM\((.*?)\)/, sum);
+		}
+
+		let answer = parser.parse(formula);
+		if (!answer.error)
+			$(el).val(answer.result).trigger('change');
+		else
+			$(el).val("");
+	});
+
+
+	$('#cabinet-view .number-input').each(function (i, element) {
+		let _this = element;
+
 		$(this).closest("tr").find('.formula-input').each((i, el) => {
 			$(_this).closest("tr").find('.number-input').each((i, el) => {
 				let name = $(el).data("name");
-	
+
 				let value = $(el).val();
-	
+
 				if (name)
 					parser.setVariable(name, value);
 			});
-	
+
+			let formula = $(el).data("formula");
+
+			if (formula) {
+				let res = parser.parse(formula);
+
+				if (!res.error)
+					$(el).val(res.result);
+				else
+					$(el).val("");
+			}
+		});
+
+	});
+
+	$(document).on('change', '.number-input', function () {
+		let _this = this;
+
+		$(this).closest("tr").find('.formula-input').each((i, el) => {
+			$(_this).closest("tr").find('.number-input').each((i, el) => {
+				let name = $(el).data("name");
+
+				let value = $(el).val();
+
+				if (name)
+					parser.setVariable(name, value);
+			});
+
 			let formula = $(el).data("formula");
 
 			if (formula) {
