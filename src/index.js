@@ -762,8 +762,25 @@ $(document).ready(function () {
 			if (formula) {
 				let res = parser.parse(formula);
 
-				if (!res.error)
+				if (!res.error){
 					$(el).val(res.result);
+					let url_string = window.location.href;
+					let url = new URL(url_string);
+
+					let table_id = url.searchParams.get("table_id");
+					let collection_id = url.searchParams.get("collection_id");
+
+					$.ajax({
+						method: "POST",
+						url: "http://eko.md.uz/api/default/set-value",
+						data: {
+							[$(el).attr('name')]: $(el).val(),
+							table_id,
+							collection_id
+						}
+					}).done(function (res) {
+					});
+				}
 				else
 					$(el).val("");
 			}
@@ -789,8 +806,26 @@ $(document).ready(function () {
 			if (formula) {
 				let res = parser.parse(formula);
 
-				if (!res.error)
+				if (!res.error){
 					$(el).val(res.result);
+					
+					let url_string = window.location.href;
+					let url = new URL(url_string);
+
+					let table_id = url.searchParams.get("table_id");
+					let collection_id = url.searchParams.get("collection_id");
+
+					$.ajax({
+						method: "POST",
+						url: "http://eko.md.uz/api/default/set-value",
+						data: {
+							[$(el).attr('name')]: $(el).val(),
+							table_id,
+							collection_id
+						}
+					}).done(function (res) {
+					});
+				}
 				else
 					$(el).val("");
 			}
