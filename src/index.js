@@ -210,6 +210,8 @@ $(document).ready(function () {
 					name: "",
 					formula: "",
 					table: "",
+					isgroup: 1,
+					grouptype: 2
 				};
 			}
 
@@ -267,6 +269,8 @@ $(document).ready(function () {
 					name: "",
 					formula: "",
 					table: "",
+					isgroup: 1,
+					grouptype: 2
 				});
 				createTypes(types);
 			});
@@ -281,6 +285,8 @@ $(document).ready(function () {
 			let left = $('<div class="left">');
 			let form_group_active = $('<div class="form-group active">');
 			let form_group_active2 = $('<div class="form-group active">');
+			let form_group_active3 = $('<div class="form-group active">'); // for second selectable
+			let form_group_active4 = $('<div class="form-group active">'); // for second chechbox
 			let form_group_formula = $('<div class="form-group formula ' + (types[k].type == 4 ? "active" : "") + '">');
 			let form_group_table = $('<div class="form-group table ' + (types[k].type == 5 ? "active" : "") + '">');
 			let table_select = $("<select class='table-select form-control' data-selected='" + types[k].table + "' >").val(types[k].table).change(function () {
@@ -301,6 +307,25 @@ $(document).ready(function () {
 			let options5 = $('<option value="5" ' + (types[k].type == 5 ? 'selected' : '') + '>table</option>');
 			let options6 = $('<option value="6" ' + (types[k].type == 6 ? 'selected' : '') + '>date</option>');
 			let options7 = $('<option value="7" ' + (types[k].type == 7 ? 'selected' : '') + '>numberation</option>');
+
+			let select2 = $('<select class="form-control" name="grouptype">').val(types[k].grouptype).change(function () {
+				types[k].grouptype = $(this).val();
+			});
+
+			let opts1 = $('<option value="1" ' + (types[k].grouptype == 1 ? 'selected' : '') + '>%</option>');
+			let opts2 = $('<option value="2" ' + (types[k].grouptype == 2 ? 'selected' : '') + '>SUM</option>');
+			
+			let int1 = $('<input type="checkbox" class="form-control" ' + (types[k].isgroup == 1 ? "checked" : "") + ' name="isgroup" value="1">').click(function () {
+				types[k].isgroup = $(this).val();
+				if($(this).is(':checked')){
+					types[k].isgroup = 1;
+				} else {
+					types[k].isgroup = 0;
+				}
+			 });
+
+			opts1.appendTo(select2);
+			opts2.appendTo(select2);
 
 			let count = types.length;
 			let max = 26;
@@ -325,7 +350,6 @@ $(document).ready(function () {
 
 			});
 
-
 			// type for table end
 
 			options3.appendTo(select);
@@ -342,8 +366,13 @@ $(document).ready(function () {
 
 			input1.appendTo(form_group_active2);
 
+			select2.appendTo(form_group_active3);
+
+			int1.appendTo(form_group_active4);
+
 			form_group_active2.appendTo(left);
 			form_group_active.appendTo(left);
+			
 
 			for (let r = 0; types[k].variants && r < types[k].variants.length; r++) {
 				let a = $("<input type='text' name='variant' class='form-control' placeholder='variants'>").val(types[k].variants[r]).change(function () {
@@ -378,6 +407,8 @@ $(document).ready(function () {
 
 			a.appendTo(form_group_last_select);
 			form_group_last_select.appendTo(left);
+			form_group_active3.appendTo(left);
+			form_group_active4.appendTo(left);
 
 			left.appendTo(wrap);
 			wrap.appendTo(td);
