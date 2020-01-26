@@ -494,44 +494,6 @@ $(document).ready(function () {
 		let table = $("<table class='table table-striped'>");
 		let tbody = $("<tbody>").appendTo(table);
 
-		/*
-		let tfoot = $("<tfoot>").appendTo(table);
-
-		let tfoot_tr = $("<tr>").appendTo(tfoot);
-		let max = null;
-		let sums = new Array(matrix.length).fill(0);
-
-		for (let i = 0; i < matrix.length; i++) {
-
-			for (let j = 0; j < matrix[i].length; j++) {
-				sums[i] += Number.parseInt(matrix[i][j].colspan);
-
-				if (matrix[i][j].rowspan > 1) {
-					for (let u = i + 1; u <= i + Number.parseInt(matrix[i][j].rowspan) - 1; u++) {
-						sums[u] += Number.parseInt(matrix[i][j].colspan);
-					}
-				}
-			}
-		}
-
-		max = Math.max(...sums);
-
-		for (let i = 0; i < max; i++) {
-			let th = $("<th class='text-center'>").appendTo(tfoot_tr);
-
-			$('<a href="#!">').html('<i class="fa fa-close">').click(function () {
-				for (let j = 0; j < matrix[0].length; j++) {
-					if (matrix[0][j].colspan - 1 + j == i) {
-						if (matrix[0][j].colspan == 1)
-							matrix[0].splice(j, 1);
-						else
-							matrix[0][j].colspan--;
-						createTable(matrix, true);
-					}
-				}
-			}).appendTo(th);
-		}*/
-
 		for (let i = 0; i < matrix.length; i++) {
 			let tr = $("<tr>");
 
